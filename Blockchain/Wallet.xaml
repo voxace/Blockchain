@@ -1,0 +1,58 @@
+﻿<Window x:Class="Blockchain.Wallet"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Blockchain"
+        mc:Ignorable="d"
+        Title="Wallet" Height="600" Width="800">
+    <Grid Background="#FF191921">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="1" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition x:Name="SendReceiveRow" Height="50"/>
+                <RowDefinition x:Name="ReceiveDetailsRow" Height="0"/>
+                <RowDefinition x:Name="SendDetailsRow" Height="0"/>
+                <RowDefinition x:Name="AddressRow" Height="80"/>
+                <RowDefinition x:Name="BalanceRow" Height="1*"/>
+                <RowDefinition x:Name="QrCodeRow" Height="2*"/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Receive" Grid.Column="0" Background="#FF37374D" FontSize="16" Foreground="White" BorderBrush="{x:Null}" />
+                <Button Content="Send" Grid.Column="1" Background="#FF37374D" FontSize="16" Foreground="White" BorderBrush="{x:Null}" />
+            </Grid>
+            <Viewbox Grid.Row="3" Margin="20,0" >
+                <StackPanel Orientation="Vertical" Margin="0">
+                    <Label Content="Your Current SteedyBucks Address:" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="#ffffff" FontFamily="Century Gothic"/>
+                    <Label Content="0x984638732902bd32879g7fg43f8b743fr349f2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="#ffffff" FontSize="16" FontFamily="Century Gothic"/>
+                </StackPanel>
+            </Viewbox>
+            <Viewbox  Grid.Row="4" Margin="20,0">
+                <Label Content="0.14810172 STB" HorizontalContentAlignment="Center"  VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"
+                           Foreground="#FFE49600" FontFamily="Century Gothic" BorderBrush="#FF37374D" BorderThickness="0,1" FontSize="48" Padding="0,30"/>
+            </Viewbox>
+            
+            <Image Margin="20" x:Name="QrImage" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+        <Rectangle Grid.Column="1" Fill="#FF37374D" />
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Label Content="Transaction History" Grid.Row="0" BorderThickness="0,0,0,1" BorderBrush="#FF37374D" Margin="20,0"
+                   VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Century Gothic" FontSize="16" Foreground="White"/>
+        </Grid>
+    </Grid>
+</Window>
