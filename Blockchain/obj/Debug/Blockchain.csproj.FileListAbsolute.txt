@@ -51,3 +51,5 @@ C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\Blockchain.Prop
 C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\Blockchain.csproj.GenerateResource.Cache
 C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\bin\Debug\Newtonsoft.Json.dll
 C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\bin\Debug\Newtonsoft.Json.xml
+D:\Google Drive\Blockchain\Blockchain\bin\Debug\Newtonsoft.Json.dll
+D:\Google Drive\Blockchain\Blockchain\bin\Debug\Newtonsoft.Json.xml

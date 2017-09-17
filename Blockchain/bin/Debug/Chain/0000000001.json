@@ -1,17 +1,12 @@
 {
   "previousHash": "5d7eb9d0aa21559162c833af95f8f9002f398584e2b5f1153cf74a655f73e35f",
   "index": 1,
-  "timestamp": "2017-09-15T16:25:42.1602436+10:00",
+  "timestamp": "2017-09-17T16:56:16.3932877+10:00",
   "data": {
     "transactions": [
       {
-        "sender": "anj",
-        "recipient": "dave",
-        "amount": 1000.0
-      },
-      {
-        "sender": "dav",
-        "recipient": "anj",
+        "sender": "a",
+        "recipient": "b",
         "amount": 1.0
       }
     ]

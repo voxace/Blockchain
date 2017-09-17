@@ -97,6 +97,7 @@ namespace Blockchain
             Serialize.WriteBlock(chain.ElementAt(chain.Count() - 1));         
             Block newBlock = new Block();
             newBlock.newBlock(chain.Count(), DateTime.Now, newLedger, chain.ElementAt(chain.Count() - 1).HashBlock());
+			chain.ElementAt(chain.Count() - 1).mineBlock();
             chain.Add(newBlock);
             
             newLedger = new Ledger();
