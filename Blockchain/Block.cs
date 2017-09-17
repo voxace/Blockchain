@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace Blockchain
 {
@@ -15,7 +16,7 @@ namespace Blockchain
         public DateTime timestamp;
         public Ledger data;
 
-        public Block()
+		public Block()
         {
             
         }
@@ -44,12 +45,22 @@ namespace Blockchain
             return hashString;
         }
 
-		public async void mineBlock()
+		public async Task<bool> mineBlock(bool miningWindow)
 		{
 			int count = 0;
+			int count2 = 0;
 			string hashString = "1234567890";
 
 			DateTime start = DateTime.Now;
+			DateTime previous = DateTime.Now;
+
+			Miner mw = new Miner();
+
+			if (miningWindow)
+			{				
+				mw.Show();
+			}
+			
 
 			await Task.Run(() =>
 			{
@@ -69,16 +80,57 @@ namespace Blockchain
 						hashString += String.Format("{0:x2}", x);
 					}
 
-					//System.Diagnostics.Debug.WriteLine(count.ToString() + "  -  " + hashString);
+					if(!miningWindow)
+					{
+						Console.WriteLine(count.ToString() + "  -  " + hashString);
+					}
+
+					if (miningWindow)
+					{
+
+						if (count % 1000 == 0)
+						{
+							mw.Dispatcher.Invoke(DispatcherPriority.Render, new Action(() =>
+							{
+								mw.ConsoleOutput.AppendText(Environment.NewLine + count.ToString() + " - " + hashString);
+								mw.ConsoleOutput.ScrollToEnd();
+							}));
+						}
+
+						DateTime elapsed = DateTime.Now;
+
+						if (elapsed.Subtract(previous).TotalMilliseconds >= 1000)
+						{
+							mw.Dispatcher.Invoke(DispatcherPriority.Render, new Action(() =>
+							{
+								mw.speedWindow.Text = (count2 / 1000).ToString() + " KH/sec";
+							}));
+
+							count2 = 0;
+							previous = DateTime.Now;
+						}
+					}
+					
 					count++;
+					count2++;
 				}
 			});
 
-			DateTime finish = DateTime.Now;
+			if (miningWindow)
+			{
+				mw.Dispatcher.Invoke(DispatcherPriority.Render, new Action(() =>
+				{
+					mw.ConsoleOutput.AppendText(Environment.NewLine + count.ToString() + " - " + hashString);
+					mw.ConsoleOutput.ScrollToEnd();
+				}));
+			}
 
+			DateTime finish = DateTime.Now;
 			Double duration = finish.Subtract(start).TotalMilliseconds;
 
 			MessageBox.Show("The final hash is: " + hashString + " - it took " + count.ToString() + " attempts and " + duration.ToString() + " Milliseconds.");
+
+			return true;
 
 		}
 
@@ -110,6 +162,28 @@ namespace Blockchain
 		public DateTime getTimestamp()
 		{
 			return timestamp;
+		}
+
+		public static double getBalance(string pubkey)
+		{
+			double balance = 0.0;
+			string[] files = System.IO.Directory.GetFiles(System.IO.Directory.GetCurrentDirectory() + "\\Chain\\");
+			int count = 0;
+
+			foreach (string file in files)
+			{
+				Block b = new Block();
+				string index = count.ToString("0000000000");
+				b = Serialize.ReadBlock(index);
+				//string json = Newtonsoft.Json.JsonConvert.SerializeObject(b, Newtonsoft.Json.Formatting.Indented);
+				//MessageBox.Show(json);
+				Ledger l = new Ledger();
+				l = b.GetData();
+				balance += l.getBalance(pubkey);
+				count++;
+			}
+
+			return balance;
 		}
 
 		// TODO: sendTransaction(sender, recipient, amount)

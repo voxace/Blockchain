@@ -33,13 +33,31 @@ namespace Blockchain
             return data;
         }
 
+		public double getBalance(string pubKey)
+		{
+			double balance = 0;
+
+			foreach (Transaction t in transactions)
+			{
+				if(t.recipient == pubKey)
+				{
+					balance += t.amount;
+				}
+				if(t.sender == pubKey)
+				{
+					balance -= t.amount;
+				}
+			}
+			return balance;
+		}
+
     }
 
     public class Transaction
     {
         public string sender;
         public string recipient;
-        public float amount;
+        public double amount;
 
         public Transaction(string s, string r, float a)
         {
@@ -48,7 +66,7 @@ namespace Blockchain
             amount = a;
         }
 
-        public string getTransaction()
+		public string getTransaction()
         {
             return sender + "," + recipient + "," + amount.ToString() + "\n"; 
         }

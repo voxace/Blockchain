@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NetworkCommsDotNet">
+      <HintPath>.\NetworkCommsDotNet.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -71,6 +74,9 @@
     </ApplicationDefinition>
     <Compile Include="Accounts.cs" />
     <Compile Include="Keys.cs" />
+    <Compile Include="Miner.xaml.cs">
+      <DependentUpon>Miner.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Serialize.cs" />
     <Compile Include="Wallet.xaml.cs">
       <DependentUpon>Wallet.xaml</DependentUpon>
@@ -89,6 +95,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Miner.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Wallet.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

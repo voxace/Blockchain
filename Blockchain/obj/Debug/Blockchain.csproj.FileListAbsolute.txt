@@ -30,7 +30,6 @@ D:\Google Drive\Blockchain\Blockchain\bin\Debug\QRCoder.dll
 D:\Google Drive\Blockchain\Blockchain\bin\Debug\UnityEngine.dll
 D:\Google Drive\Blockchain\Blockchain\obj\Debug\Wallet.g.cs
 D:\Google Drive\Blockchain\Blockchain\obj\Debug\Wallet.baml
-D:\Google Drive\Blockchain\Blockchain\obj\Debug\Blockchain.csprojResolveAssemblyReference.cache
 C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\bin\Debug\Blockchain.exe.config
 C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\Blockchain.exe
 C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\Blockchain.pdb
@@ -53,3 +52,6 @@ C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\bin\Debug\Newtonsoft.Json
 C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\bin\Debug\Newtonsoft.Json.xml
 D:\Google Drive\Blockchain\Blockchain\bin\Debug\Newtonsoft.Json.dll
 D:\Google Drive\Blockchain\Blockchain\bin\Debug\Newtonsoft.Json.xml
+D:\Google Drive\Blockchain\Blockchain\bin\Debug\NetworkCommsDotNet.dll
+D:\Google Drive\Blockchain\Blockchain\obj\Debug\Miner.g.cs
+D:\Google Drive\Blockchain\Blockchain\obj\Debug\Miner.baml

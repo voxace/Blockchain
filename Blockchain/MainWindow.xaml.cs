@@ -91,16 +91,20 @@ namespace Blockchain
             recipientTextBox.Clear();
             amountTextBox.Clear();
 		}
-        private void AddBlock()
+        private async void AddBlock()
         {
-            MessageBox.Show(chain.ElementAt(chain.Count() - 1).index.ToString());
+            //MessageBox.Show(chain.ElementAt(chain.Count() - 1).index.ToString());
             Serialize.WriteBlock(chain.ElementAt(chain.Count() - 1));         
             Block newBlock = new Block();
             newBlock.newBlock(chain.Count(), DateTime.Now, newLedger, chain.ElementAt(chain.Count() - 1).HashBlock());
-			chain.ElementAt(chain.Count() - 1).mineBlock();
-            chain.Add(newBlock);
-            
-            newLedger = new Ledger();
+			addBlockButton.IsEnabled = false;
+			if (await chain.ElementAt(chain.Count() - 1).mineBlock(true))
+			{
+				// Actually add block when we receive broadcast (not just by clicking this button!)
+				chain.Add(newBlock);
+			}
+			addBlockButton.IsEnabled = true;
+			newLedger = new Ledger();
             NextButton.IsEnabled = true;
         }
 
@@ -108,5 +112,10 @@ namespace Blockchain
         {
             AddBlock();
         }
-    }
+
+		private void GetBalance_Click(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show(Block.getBalance(PubKeyGetBalanceTextBox.Text).ToString());
+		}
+	}
 }

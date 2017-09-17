@@ -18,7 +18,7 @@ namespace Blockchain
         {
             string index = data.index.ToString("0000000000");
             string json = JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented);
-            MessageBox.Show(json);
+            //MessageBox.Show(json);
             File.WriteAllText(System.IO.Directory.GetCurrentDirectory() + "\\Chain\\" + index + ".json", JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented));
         }
         public static Block ReadBlock(string index)

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Blockchain"
         mc:Ignorable="d"
-        Title="Blockchain Explorer" Height="640" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Blockchain Explorer" Height="640" Width="1169" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -92,10 +92,10 @@
         <TextBox x:Name="pubKeyText" HorizontalAlignment="Left" Margin="10,377,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Public Key" 
                  VerticalAlignment="Top" Height="87" Width="379" BorderBrush="Black" FontFamily="Century Gothic" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF646478" >
         </TextBox>
-        <Button x:Name="AddDataButton" Content="Add Transaction" HorizontalAlignment="Left" Margin="406,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="360" Height="35" 
+        <Button x:Name="AddDataButton" Content="Add Transaction" HorizontalAlignment="Left" Margin="515,107,0,0" Grid.Row="1" VerticalAlignment="Top" Width="251" Height="35" 
                 Click="AddDataButton_Click" FontFamily="Century Gothic" Background="#FF37374D" FontSize="16" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" TabIndex="3"/>
-        <TextBox x:Name="senderTextBox" HorizontalAlignment="Left" Height="24" Margin="515,50,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="251" FontFamily="Century Gothic" BorderBrush="Black" Background="#FF646478" FontSize="14" TabIndex="0"/>
-        <Label Content="Current Block Info:" HorizontalAlignment="Left" Margin="406,155,0,0" Grid.Row="1" VerticalAlignment="Top" Height="31" Width="378" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="16" FontWeight="Bold" FontFamily="Century Gothic" Foreground="White"/>
+        <TextBox x:Name="senderTextBox" HorizontalAlignment="Left" Height="24" Margin="515,11,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="251" FontFamily="Century Gothic" BorderBrush="Black" Background="#FF646478" FontSize="14" TabIndex="0"/>
+        <Label Content="Current Block Info:" HorizontalAlignment="Left" Margin="515,155,0,0" Grid.Row="1" VerticalAlignment="Top" Height="31" Width="251" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="16" FontWeight="Bold" FontFamily="Century Gothic" Foreground="White"/>
         <Label HorizontalAlignment="Left" Margin="406,181,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="91" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Index:" Foreground="White" FontSize="14">
 
         </Label>
@@ -106,12 +106,18 @@
         <TextBox x:Name="timestampTextBox" HorizontalAlignment="Left" Height="23" Margin="515,217,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="251" BorderBrush="Black" FontFamily="Century Gothic" Background="#FFA0A0B4" FontSize="14" TabIndex="4" Focusable="False" AllowDrop="False" IsTabStop="False" IsEnabled="False"/>
         <TextBox x:Name="previousHashTextBox" HorizontalAlignment="Left" Height="57" Margin="515,246,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="251" BorderBrush="Black" FontFamily="Century Gothic" Background="#FFA0A0B4" FontSize="14" Focusable="False" AllowDrop="False" IsTabStop="False" IsEnabled="False"/>
         <TextBox x:Name="dataTextBox" HorizontalAlignment="Left" Height="110" Margin="515,309,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="251" BorderBrush="Black" FontFamily="Century Gothic" Background="#FFA0A0B4" FontSize="14" Focusable="False" AllowDrop="False" IsTabStop="False" IsEnabled="False"/>
-        <Label HorizontalAlignment="Left" Margin="406,45,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="91" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Sender:" Foreground="White" FontSize="14"/>
-        <TextBox x:Name="recipientTextBox" HorizontalAlignment="Left" Height="24" Margin="515,82,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="251" FontFamily="Century Gothic" BorderBrush="Black" Background="#FF646478" FontSize="14" TabIndex="1"/>
-        <Label HorizontalAlignment="Left" Margin="406,77,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="91" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Recipient:" Foreground="White" FontSize="14"/>
-        <TextBox x:Name="amountTextBox" HorizontalAlignment="Left" Height="24" Margin="515,114,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="251" FontFamily="Century Gothic" BorderBrush="Black" Background="#FF646478" FontSize="14" TabIndex="2"/>
-        <Label HorizontalAlignment="Left" Margin="406,109,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="91" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Amount:" Foreground="White" FontSize="14"/>
+        <Label HorizontalAlignment="Left" Margin="406,6,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="91" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Sender:" Foreground="White" FontSize="14"/>
+        <TextBox x:Name="recipientTextBox" HorizontalAlignment="Left" Height="24" Margin="515,43,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="251" FontFamily="Century Gothic" BorderBrush="Black" Background="#FF646478" FontSize="14" TabIndex="1"/>
+        <Label HorizontalAlignment="Left" Margin="406,38,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="91" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Recipient:" Foreground="White" FontSize="14"/>
+        <TextBox x:Name="amountTextBox" HorizontalAlignment="Left" Height="24" Margin="515,75,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="251" FontFamily="Century Gothic" BorderBrush="Black" Background="#FF646478" FontSize="14" TabIndex="2"/>
+        <Label HorizontalAlignment="Left" Margin="406,70,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="91" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Amount:" Foreground="White" FontSize="14"/>
         <Button x:Name="addBlockButton" Content="Add New Block" HorizontalAlignment="Left" Margin="515,428,0,0" Grid.Row="1" VerticalAlignment="Top" Width="251" Height="36" 
                 FontFamily="Century Gothic" Background="#FF37374D" FontSize="16" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" Click="addBlockButton_Click" TabIndex="4"/>
+        <Button x:Name="Get_Balance" Content="Get Balance" HorizontalAlignment="Left" Margin="893,46,0,0" Grid.Row="1" VerticalAlignment="Top" Width="251" Height="35" 
+            Click="GetBalance_Click" FontFamily="Century Gothic" Background="#FF37374D" FontSize="16" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" TabIndex="3"/>
+        <TextBox x:Name="PubKeyGetBalanceTextBox" HorizontalAlignment="Left" Height="24" Margin="893,14,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="251" FontFamily="Century Gothic" BorderBrush="Black" Background="#FF646478" FontSize="14" TabIndex="0"/>
+        <Label HorizontalAlignment="Left" Margin="797,10,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="91" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Public Key:" Foreground="White" FontSize="14"/>
+        <Button x:Name="LaunchMinerButton" Content="Launch Miner" HorizontalAlignment="Left" Margin="893,429,0,0" Grid.Row="1" VerticalAlignment="Top" Width="251" Height="35" 
+            Click="AddDataButton_Click" FontFamily="Century Gothic" Background="#FF37374D" FontSize="16" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" TabIndex="3"/>
     </Grid>
 </Window>
