@@ -55,3 +55,4 @@ D:\Google Drive\Blockchain\Blockchain\bin\Debug\Newtonsoft.Json.xml
 D:\Google Drive\Blockchain\Blockchain\bin\Debug\NetworkCommsDotNet.dll
 D:\Google Drive\Blockchain\Blockchain\obj\Debug\Miner.g.cs
 D:\Google Drive\Blockchain\Blockchain\obj\Debug\Miner.baml
+D:\Google Drive\Blockchain\Blockchain\obj\Debug\Blockchain.csprojResolveAssemblyReference.cache

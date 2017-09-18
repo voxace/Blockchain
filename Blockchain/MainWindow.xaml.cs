@@ -20,38 +20,28 @@ namespace Blockchain
     /// </summary>
     public partial class MainWindow : Window
     {
-        Block currentBlock;
-        List<Block> chain = new List<Block>();
-        Ledger newLedger = new Ledger();
-        List<Accounts> accounts = new List<Accounts>();
+		int blockIndex = 0;
+		Node node = new Node();
 
-        public MainWindow()
+		public MainWindow()
         {
-            InitializeComponent();
-            createGenesisBlock();
-            currentBlock = createGenesisBlock();
-            chain.Add(currentBlock);
-			showBlockInfo();
-        }
+            InitializeComponent();            
+			showBlockInfo(blockIndex);
 
-        private Block createGenesisBlock()
-        {
-            // The Following lines show how the Genesis block was created originally:
-                //Ledger genesisData = new Ledger();
-                //genesisData.addTransaction(new Transaction("SteedyBucks", "Steedy", 1000000.0f));
-                //Block genesis = new Block();
-                //genesis.newBlock(0, DateTime.Now, genesisData, "0");
-                //return genesis;
-            
-            // Reads the hard coded genesis block from JSON file
-            return Serialize.ReadBlock("0000000000");
-        }
+			// Testing asymmetric signature verification
+			string messageToSign = "Hello World!";
+			string signedMessage = Keys.SignData(messageToSign, Ledger.steedy_private_key);
+			MessageBox.Show(signedMessage);
+			bool success = Keys.VerifyData(messageToSign, signedMessage, Ledger.steedy_pub_key);
+			MessageBox.Show("Is this message sent by me? " + success);
+
+		}        
 
         private void PreviousButton_Click(object sender, RoutedEventArgs e)
         {
-			currentBlock = chain.ElementAt(currentBlock.getIndex() - 1);
-			showBlockInfo();
-			if (currentBlock.getIndex() == 0)
+			blockIndex--;
+			showBlockInfo(blockIndex);
+			if (blockIndex == 0)
 			{
 				PreviousButton.IsEnabled = false;
 			}
@@ -60,21 +50,22 @@ namespace Blockchain
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
-			currentBlock = chain.ElementAt(currentBlock.getIndex() + 1);
-			showBlockInfo();
-			if (currentBlock.getIndex() == chain.Count()-1)
+			blockIndex++;
+			showBlockInfo(blockIndex);
+			if (blockIndex == node.chain.Count()-1)
 			{
 				NextButton.IsEnabled = false;
 			}
 			PreviousButton.IsEnabled = true;
 		}
 
-		private void showBlockInfo()
+		private void showBlockInfo(int index)
 		{
-			dataTextBox.Text = currentBlock.GetData().getString();
-			timestampTextBox.Text = currentBlock.getTimestamp().ToUniversalTime().ToString();
-			previousHashTextBox.Text = currentBlock.getPreviousHash();
-			indexTextBox.Text = currentBlock.getIndex().ToString();
+			Tuple<string,string,string> result = node.queryBlockInfo(index);
+			dataTextBox.Text = result.Item1;
+			timestampTextBox.Text = result.Item2;
+			previousHashTextBox.Text = result.Item3;
+			indexTextBox.Text = index.ToString();
 		}
 
 		private void createKeyPairButton_Click(object sender, RoutedEventArgs e)
@@ -86,25 +77,35 @@ namespace Blockchain
 
 		private void AddDataButton_Click(object sender, RoutedEventArgs e)
 		{
-            newLedger.addTransaction(new Blockchain.Transaction(senderTextBox.Text, recipientTextBox.Text, float.Parse(amountTextBox.Text)));
+			Tuple<bool, Transaction> result = Node.SendTransaction(senderTextBox.Text, recipientTextBox.Text, double.Parse(amountTextBox.Text),"");
+			if(result.Item1)
+			{
+				node.newLedger.addTransaction(result.Item2);
+			}
+			else
+			{
+				MessageBox.Show("Insufficient Funds");
+			}			
+
 			senderTextBox.Clear();
             recipientTextBox.Clear();
             amountTextBox.Clear();
 		}
+
         private async void AddBlock()
         {
-            //MessageBox.Show(chain.ElementAt(chain.Count() - 1).index.ToString());
-            Serialize.WriteBlock(chain.ElementAt(chain.Count() - 1));         
+			// Move this logic into Miner.cs
+            Serialize.WriteBlock(node.chain.ElementAt(node.chain.Count() - 1));         
             Block newBlock = new Block();
-            newBlock.newBlock(chain.Count(), DateTime.Now, newLedger, chain.ElementAt(chain.Count() - 1).HashBlock());
+            newBlock.newBlock(node.chain.Count(), DateTime.Now, node.newLedger, node.chain.ElementAt(node.chain.Count() - 1).HashBlock());
 			addBlockButton.IsEnabled = false;
-			if (await chain.ElementAt(chain.Count() - 1).mineBlock(true))
+			if (await node.chain.ElementAt(node.chain.Count() - 1).mineBlock(true))
 			{
 				// Actually add block when we receive broadcast (not just by clicking this button!)
-				chain.Add(newBlock);
+				node.chain.Add(newBlock);
 			}
 			addBlockButton.IsEnabled = true;
-			newLedger = new Ledger();
+			node.newLedger = new Ledger();
             NextButton.IsEnabled = true;
         }
 
@@ -115,7 +116,7 @@ namespace Blockchain
 
 		private void GetBalance_Click(object sender, RoutedEventArgs e)
 		{
-			MessageBox.Show(Block.getBalance(PubKeyGetBalanceTextBox.Text).ToString());
+			MessageBox.Show(Node.getBalance(PubKeyGetBalanceTextBox.Text).ToString());
 		}
 	}
 }

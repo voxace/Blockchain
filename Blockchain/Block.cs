@@ -17,8 +17,7 @@ namespace Blockchain
         public Ledger data;
 
 		public Block()
-        {
-            
+        {            
         }
 
         public void newBlock(int i, DateTime t, Ledger d, string ph)
@@ -45,6 +44,11 @@ namespace Blockchain
             return hashString;
         }
 
+		/// <summary>
+		/// Attempts to find the correct hash for the current block.
+		/// </summary>
+		/// <param name="miningWindow">Shows the mining window if set to true.</param>
+		/// <returns>Returns true if this user successfully mined the block.</returns>
 		public async Task<bool> mineBlock(bool miningWindow)
 		{
 			int count = 0;
@@ -126,9 +130,9 @@ namespace Blockchain
 			}
 
 			DateTime finish = DateTime.Now;
-			Double duration = finish.Subtract(start).TotalMilliseconds;
+			Double duration = finish.Subtract(start).TotalSeconds;
 
-			MessageBox.Show("The final hash is: " + hashString + " - it took " + count.ToString() + " attempts and " + duration.ToString() + " Milliseconds.");
+			mw.ConsoleOutput.AppendText(Environment.NewLine + "Block time: " + duration.ToString() + " Seconds. Average speed: " + ((count / duration) / 1000).ToString("N2") + " KH/sec.");
 
 			return true;
 
@@ -141,7 +145,11 @@ namespace Blockchain
 
         public void addTransaction(string sender, string recipient, float amount)
         {
-            data.addTransaction(new Blockchain.Transaction(sender, recipient, amount));
+			Transaction temp = new Transaction(sender, recipient, amount);
+			if (Node.verifyTransaction(temp))
+			{
+				data.addTransaction(temp);
+			}
         }
 
 		public Ledger GetData()
@@ -163,51 +171,6 @@ namespace Blockchain
 		{
 			return timestamp;
 		}
-
-		public static double getBalance(string pubkey)
-		{
-			double balance = 0.0;
-			string[] files = System.IO.Directory.GetFiles(System.IO.Directory.GetCurrentDirectory() + "\\Chain\\");
-			int count = 0;
-
-			foreach (string file in files)
-			{
-				Block b = new Block();
-				string index = count.ToString("0000000000");
-				b = Serialize.ReadBlock(index);
-				//string json = Newtonsoft.Json.JsonConvert.SerializeObject(b, Newtonsoft.Json.Formatting.Indented);
-				//MessageBox.Show(json);
-				Ledger l = new Ledger();
-				l = b.GetData();
-				balance += l.getBalance(pubkey);
-				count++;
-			}
-
-			return balance;
-		}
-
-		// TODO: sendTransaction(sender, recipient, amount)
-		// Calls getBalance to ensure there is enough in wallet
-		// Transmits the transaction to the network
-
-		// TODO: receiveTransaction(sender, recipient, amount)
-		// Verfies transaction before adding it to the Transaction list
-
-		// TODO: getBalance(pubkey)
-		// Loops through each block looking at inputs/outputs of pubkey address specified
-
-		// TODO: getTransactions(pubkey)
-		// Loops through all transactions in a single block and returns the overall input/output of pubkey address specified
-
-		// TODO: verifyTransaction(sender's pubkey, amount)
-		// Calls getBalance() and then checks that the amount is valid
-		// Loops through all blocks to check that the sender has enough money to send.
-
-		// TODO: mineBlock()
-		// Attempts to find the correct hash of the block
-		// Includes a special transaction to the owners address to reward
-		// Hash of the block is whatever random number it takes to get the first 3 numbers to be 0
-		// Calls rewardMiner(pubkey)
 
 		// TODO: rewardMiner(pubkey)
 		// Rewards the miner of the current block with the current block reward

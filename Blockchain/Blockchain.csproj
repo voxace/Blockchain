@@ -77,6 +77,7 @@
     <Compile Include="Miner.xaml.cs">
       <DependentUpon>Miner.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Node.cs" />
     <Compile Include="Serialize.cs" />
     <Compile Include="Wallet.xaml.cs">
       <DependentUpon>Wallet.xaml</DependentUpon>
