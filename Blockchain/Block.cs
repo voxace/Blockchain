@@ -143,14 +143,16 @@ namespace Blockchain
             Serialize.WriteBlock(b);
         }
 
-        public void addTransaction(string sender, string recipient, float amount)
-        {
-			Transaction temp = new Transaction(sender, recipient, amount);
-			if (Node.verifyTransaction(temp))
-			{
-				data.addTransaction(temp);
-			}
-        }
+		// Adds the transaction to the current ledger
+		// public void addTransaction(string sender, string recipient, float amount, string private_key)
+		// {
+		//		string txid = Keys.SignData((sender + recipient + amount.ToString()), private_key);
+		//		Transaction temp = new Transaction(sender, recipient, amount, txid);
+		//		if (Node.verifyTransaction(temp))
+		//		{
+		//			data.addTransaction(temp);
+		//		}
+		// }
 
 		public Ledger GetData()
 		{

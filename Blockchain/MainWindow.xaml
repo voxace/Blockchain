@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Blockchain"
-        mc:Ignorable="d"
-        Title="Blockchain Explorer" Height="640" Width="1169" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        mc:Ignorable="d" Title="Blockchain Explorer" 
+        Height="760" Width="1200" WindowStartupLocation="CenterScreen"
+        MinHeight="700" MinWidth="960">
     <Window.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -63,61 +64,209 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Grid Background="#FF191921">
+    <Grid Background="#FF191921" Margin="0">
         <Grid.RowDefinitions>
+            <RowDefinition Height="90"/>
             <RowDefinition Height="1*"/>
-            <RowDefinition Height="5*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
+
+        <!-- HEADER -->
         <Viewbox Grid.Row="0" >
-            <Label Content="Blockchain Explorer"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Century Gothic" Foreground="#FFE49600"/>
+            <Label Content="SteedyBucks Blockchain Explorer" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Century Gothic" Foreground="#FFE49600"/>
         </Viewbox>
 
-
-        <Grid Grid.Row="2" >
+        <!-- MAIN -->
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
+                <ColumnDefinition Width="6*" />
+                <ColumnDefinition Width="11*" />
             </Grid.ColumnDefinitions>
-            <Button Content="Previous" Grid.Column="0" x:Name="PreviousButton" Click="PreviousButton_Click" IsEnabled="False" Background="#FF37374D" FontSize="16" 
-                    Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}"/>
-            <Button Content="Next" Grid.Column="1" x:Name="NextButton" Click="NextButton_Click" IsEnabled="False" Background="#FF37374D" FontSize="16" 
-                    Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}"/>
-        </Grid>
-        <Button x:Name="createKeyPairButton" Content="Create Key Pair" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Style="{DynamicResource ButtonStyle1}"
-                Width="379" Height="35" Click="createKeyPairButton_Click" FontFamily="Century Gothic" Background="#FF37374D" FontSize="16" Foreground="White" BorderBrush="{x:Null}"/>
-        <TextBox x:Name="privKeyText" HorizontalAlignment="Left" Margin="10,50,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Private Key" 
-                 VerticalAlignment="Top" Height="322" Width="379" BorderBrush="Black" FontFamily="Century Gothic" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF646478" >
-        </TextBox>
-        <TextBox x:Name="pubKeyText" HorizontalAlignment="Left" Margin="10,377,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Public Key" 
-                 VerticalAlignment="Top" Height="87" Width="379" BorderBrush="Black" FontFamily="Century Gothic" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF646478" >
-        </TextBox>
-        <Button x:Name="AddDataButton" Content="Add Transaction" HorizontalAlignment="Left" Margin="515,107,0,0" Grid.Row="1" VerticalAlignment="Top" Width="251" Height="35" 
-                Click="AddDataButton_Click" FontFamily="Century Gothic" Background="#FF37374D" FontSize="16" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" TabIndex="3"/>
-        <TextBox x:Name="senderTextBox" HorizontalAlignment="Left" Height="24" Margin="515,11,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="251" FontFamily="Century Gothic" BorderBrush="Black" Background="#FF646478" FontSize="14" TabIndex="0"/>
-        <Label Content="Current Block Info:" HorizontalAlignment="Left" Margin="515,155,0,0" Grid.Row="1" VerticalAlignment="Top" Height="31" Width="251" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="16" FontWeight="Bold" FontFamily="Century Gothic" Foreground="White"/>
-        <Label HorizontalAlignment="Left" Margin="406,181,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="91" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Index:" Foreground="White" FontSize="14">
+            <!-- KEY PAIRS -->
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
 
-        </Label>
-        <Label HorizontalAlignment="Left" Margin="406,210,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="91" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Timestamp:" Foreground="White" FontSize="14"/>
-        <Label HorizontalAlignment="Left" Margin="394,241,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="103" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Previous Hash:" Foreground="White" FontSize="14"/>
-        <Label HorizontalAlignment="Left" Margin="406,308,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="91" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Data:" Foreground="White" FontSize="14"/>
-        <TextBox x:Name="indexTextBox" HorizontalAlignment="Left" Height="23" Margin="515,188,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="251" BorderBrush="Black" FontFamily="Century Gothic" Background="#FFA0A0B4" FontSize="14" TabIndex="3" Focusable="False" AllowDrop="False" IsTabStop="False" IsEnabled="False"/>
-        <TextBox x:Name="timestampTextBox" HorizontalAlignment="Left" Height="23" Margin="515,217,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="251" BorderBrush="Black" FontFamily="Century Gothic" Background="#FFA0A0B4" FontSize="14" TabIndex="4" Focusable="False" AllowDrop="False" IsTabStop="False" IsEnabled="False"/>
-        <TextBox x:Name="previousHashTextBox" HorizontalAlignment="Left" Height="57" Margin="515,246,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="251" BorderBrush="Black" FontFamily="Century Gothic" Background="#FFA0A0B4" FontSize="14" Focusable="False" AllowDrop="False" IsTabStop="False" IsEnabled="False"/>
-        <TextBox x:Name="dataTextBox" HorizontalAlignment="Left" Height="110" Margin="515,309,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="251" BorderBrush="Black" FontFamily="Century Gothic" Background="#FFA0A0B4" FontSize="14" Focusable="False" AllowDrop="False" IsTabStop="False" IsEnabled="False"/>
-        <Label HorizontalAlignment="Left" Margin="406,6,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="91" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Sender:" Foreground="White" FontSize="14"/>
-        <TextBox x:Name="recipientTextBox" HorizontalAlignment="Left" Height="24" Margin="515,43,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="251" FontFamily="Century Gothic" BorderBrush="Black" Background="#FF646478" FontSize="14" TabIndex="1"/>
-        <Label HorizontalAlignment="Left" Margin="406,38,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="91" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Recipient:" Foreground="White" FontSize="14"/>
-        <TextBox x:Name="amountTextBox" HorizontalAlignment="Left" Height="24" Margin="515,75,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="251" FontFamily="Century Gothic" BorderBrush="Black" Background="#FF646478" FontSize="14" TabIndex="2"/>
-        <Label HorizontalAlignment="Left" Margin="406,70,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="91" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Amount:" Foreground="White" FontSize="14"/>
-        <Button x:Name="addBlockButton" Content="Add New Block" HorizontalAlignment="Left" Margin="515,428,0,0" Grid.Row="1" VerticalAlignment="Top" Width="251" Height="36" 
-                FontFamily="Century Gothic" Background="#FF37374D" FontSize="16" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" Click="addBlockButton_Click" TabIndex="4"/>
-        <Button x:Name="Get_Balance" Content="Get Balance" HorizontalAlignment="Left" Margin="893,46,0,0" Grid.Row="1" VerticalAlignment="Top" Width="251" Height="35" 
-            Click="GetBalance_Click" FontFamily="Century Gothic" Background="#FF37374D" FontSize="16" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" TabIndex="3"/>
-        <TextBox x:Name="PubKeyGetBalanceTextBox" HorizontalAlignment="Left" Height="24" Margin="893,14,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="251" FontFamily="Century Gothic" BorderBrush="Black" Background="#FF646478" FontSize="14" TabIndex="0"/>
-        <Label HorizontalAlignment="Left" Margin="797,10,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="91" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Public Key:" Foreground="White" FontSize="14"/>
-        <Button x:Name="LaunchMinerButton" Content="Launch Miner" HorizontalAlignment="Left" Margin="893,429,0,0" Grid.Row="1" VerticalAlignment="Top" Width="251" Height="35" 
-            Click="AddDataButton_Click" FontFamily="Century Gothic" Background="#FF37374D" FontSize="16" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" TabIndex="3"/>
+                <Button x:Name="createKeyPairButton" Content="Create Key Pair" Grid.Row="0" Style="{DynamicResource ButtonStyle1}" Margin="5,10,5,5"
+                Click="createKeyPairButton_Click" FontFamily="Century Gothic" Background="#FF37374D" FontSize="16" Foreground="White" BorderBrush="{x:Null}"/>
+
+                <TextBox x:Name="privKeyText" Grid.Row="1" TextWrapping="Wrap" Text="Private Key" BorderBrush="Black" FontFamily="Century Gothic" HorizontalAlignment="Stretch"
+                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF646478" Margin="5" VerticalAlignment="Stretch"/>
+
+                <TextBox x:Name="pubKeyText" Grid.Row="2" TextWrapping="Wrap" Text="Public Key" HorizontalAlignment="Stretch" Margin="5,5,5,10"
+                 BorderBrush="Black" FontFamily="Century Gothic" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF646478" />
+            </Grid>
+
+            <!-- BLOCK INFO -->
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="70" />
+                </Grid.RowDefinitions>
+                <!--Group Boxes-->
+                <GroupBox Header="Transactions" FontFamily="Century Gothic" FontSize="16" Foreground="White" 
+                          FontWeight="Bold" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Grid.RowSpan="6" Margin="10,10,10,30" BorderBrush="White" />
+                <GroupBox Header="Current Block Info" FontFamily="Century Gothic" FontSize="16" Foreground="White" 
+                          FontWeight="Bold" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="4" Grid.RowSpan="5" Margin="10,20,10,10" BorderBrush="White" />
+
+                <!--Sender-->
+                <Label Grid.Row="1" Grid.Column="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Sender:" Foreground="White" FontSize="14"/>
+                <TextBox x:Name="senderTextBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" FontFamily="Century Gothic" BorderBrush="Black" Background="#FF646478" FontSize="14" TabIndex="0" Margin="0,5,25,5" VerticalContentAlignment="Center"/>
+
+                <!--Recipient-->
+                <Label Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Recipient:" Foreground="White" FontSize="14"/>
+                <TextBox x:Name="recipientTextBox" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"  FontFamily="Century Gothic" BorderBrush="Black" Background="#FF646478" FontSize="14" TabIndex="1" Margin="0,5,25,5" VerticalContentAlignment="Center"/>
+
+                <!--Amount-->
+                <Label Grid.Row="3" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Amount:" Foreground="White" FontSize="14"/>
+                <TextBox x:Name="amountTextBox" Grid.Row="3" Grid.Column="1" FontFamily="Century Gothic" BorderBrush="Black" Background="#FF646478" FontSize="14" TabIndex="2" Margin="0,5,5,5" VerticalContentAlignment="Center"/>
+                <Button x:Name="AddDataButton" Content="Add Transaction" Grid.Row="4" Grid.Column="1" Click="AddDataButton_Click" FontFamily="Century Gothic" Background="#FF37374D" 
+                        FontSize="16" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" TabIndex="4" Margin="0,5,5,5"/>
+
+                <!--Get Balance-->
+                <Label Grid.Row="3" Grid.Column="2" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Public Key:" Foreground="White" FontSize="14"/>
+                <TextBox x:Name="PubKeyGetBalanceTextBox" Grid.Row="3" Grid.Column="3" FontFamily="Century Gothic" BorderBrush="Black" Background="#FF646478" FontSize="14" TabIndex="3" Margin="0,5,25,5" VerticalContentAlignment="Center"/>
+                <Button x:Name="Get_Balance" Content="Get Balance" Grid.Row="4" Grid.Column="3" Click="GetBalance_Click" FontFamily="Century Gothic" Background="#FF37374D" 
+                        FontSize="16" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" TabIndex="5" Margin="0,5,25,5"/>
+                
+                <!--Index-->
+                <Label Grid.Column="0" Grid.Row="6" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Index:" Foreground="White" FontSize="14"/>
+                <TextBox x:Name="indexTextBox" Grid.Row="6" Grid.Column="1" BorderBrush="Black" FontFamily="Century Gothic" Background="#FFA0A0B4" FontSize="14" 
+                         TabIndex="6" Focusable="False" AllowDrop="False" IsTabStop="False" IsEnabled="False" Margin="0,5,5,5"  VerticalContentAlignment="Center"/>
+                
+                <!--Previous Hash-->
+                <Label Grid.Row="6" Grid.Column="2" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Previous Hash:" Foreground="White" FontSize="14"/>
+                <TextBox x:Name="previousHashTextBox" Grid.Row="6" Grid.Column="3" Grid.RowSpan="2" BorderBrush="Black" FontFamily="Century Gothic" Background="#FFA0A0B4" 
+                         FontSize="14" Focusable="False" AllowDrop="False" IsTabStop="False" IsEnabled="False" Margin="0,5,25,5" TextWrapping="Wrap" VerticalContentAlignment="Center"/>
+                
+                <!--Timestamp-->
+                <Label Grid.Row="7" Grid.Column="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Timestamp:" Foreground="White" FontSize="14"/>
+                <TextBox x:Name="timestampTextBox" Grid.Row="7" Grid.Column="1" BorderBrush="Black" FontFamily="Century Gothic" Background="#FFA0A0B4" FontSize="14" TabIndex="4" 
+                         Focusable="False" AllowDrop="False" IsTabStop="False" IsEnabled="False" Margin="0,5,5,5" VerticalContentAlignment="Center"/>
+
+                <!--Data-->
+                <Label Grid.Row="8" Grid.Column="0" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Data:" Foreground="White" FontSize="14" Margin="0,5,0,0"/>
+                <DataGrid Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="3" ColumnHeaderHeight="28" Margin="0,5,25,5" x:Name="DataGridView" VerticalScrollBarVisibility="Visible" AutoGenerateColumns="False" 
+                          RowHeight="125" Background="#FF646478" FontFamily="Century Gothic" CanUserReorderColumns="False" CanUserResizeColumns="False" RowHeaderWidth="0" RowBackground="#FF646478" 
+                          SelectionMode="Single" SelectionUnit="Cell" CanUserResizeRows="False" RowDetailsVisibilityMode="Visible" ScrollViewer.CanContentScroll="False">
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="Copy" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Sender" Binding="{Binding sender}" Width="3*" IsReadOnly="True" FontSize="10" FontFamily="Century Gothic" Foreground="Black">
+                            <DataGridTextColumn.HeaderStyle>
+                                <Style TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="Background" Value="#FF37374D"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="BorderBrush" Value="#FF191921" />
+                                    <Setter Property="BorderThickness" Value="1,1,1,1" />
+                                </Style>
+                            </DataGridTextColumn.HeaderStyle>
+                            <DataGridTextColumn.ElementStyle>
+                                <Style>
+                                    <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                    <Setter Property="FrameworkElement.VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Recipient" Binding="{Binding recipient}" Width="3*" IsReadOnly="True"  FontSize="10" FontFamily="Century Gothic">
+                            <DataGridTextColumn.HeaderStyle>
+                                <Style TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="Background" Value="#FF37374D"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="BorderBrush" Value="#FF191921" />
+                                    <Setter Property="BorderThickness" Value="0,1,1,1" />
+                                </Style>
+                            </DataGridTextColumn.HeaderStyle>
+                            <DataGridTextColumn.ElementStyle>
+                                <Style>
+                                    <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                    <Setter Property="FrameworkElement.VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Amount" Binding="{Binding amount}" Width="1*" IsReadOnly="True"  FontSize="14" FontFamily="Century Gothic" >
+                            <DataGridTextColumn.HeaderStyle>
+                                <Style TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="Background" Value="#FF37374D"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="BorderBrush" Value="#FF191921" />
+                                    <Setter Property="BorderThickness" Value="0,1,1,1" />
+                                </Style>
+                            </DataGridTextColumn.HeaderStyle>
+                            <DataGridTextColumn.ElementStyle>
+                                <Style>
+                                    <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                    <Setter Property="FrameworkElement.VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Transaction ID" Binding="{Binding txid}" Width="3*" IsReadOnly="True"  FontSize="10" FontFamily="Century Gothic" >
+                            <DataGridTextColumn.HeaderStyle>
+                                <Style TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="Background" Value="#FF37374D"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="BorderBrush" Value="#FF191921" />
+                                    <Setter Property="BorderThickness" Value="0,1,1,1" />
+                                </Style>
+                            </DataGridTextColumn.HeaderStyle>
+                            <DataGridTextColumn.ElementStyle>
+                                <Style>
+                                    <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                    <Setter Property="FrameworkElement.VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+                
+                <!--Add New Block-->
+                <Button x:Name="addBlockButton" Content="Add New Block" Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,25,25" FontFamily="Century Gothic" 
+                        Background="#FF37374D" FontSize="16" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" Click="addBlockButton_Click" TabIndex="6"/>
+            </Grid>
+        </Grid>
+
+        <!-- PREVIOUS / NEXT -->
+        <Grid Grid.Row="2" Margin="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Button Content="Previous" Grid.Column="0" x:Name="PreviousButton" Click="PreviousButton_Click" IsEnabled="False" Background="#FF37374D" FontSize="16" 
+                    Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" VerticalAlignment="Stretch"/>
+            <Button Content="Next" Grid.Column="1" x:Name="NextButton" Click="NextButton_Click" IsEnabled="False" Background="#FF37374D" FontSize="16" 
+                    Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" VerticalAlignment="Stretch"/>
+        </Grid>
+
     </Grid>
 </Window>

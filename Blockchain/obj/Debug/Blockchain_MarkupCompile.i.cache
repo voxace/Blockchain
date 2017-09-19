@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-D:\Google Drive\Blockchain\Blockchain\obj\Debug\
+C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\
 Blockchain
 none
 false
 DEBUG;TRACE
-D:\Google Drive\Blockchain\Blockchain\App.xaml
+C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\App.xaml
 3-927315437
 
-17-2050620433
-211144216663
+17-281691744
+211431578410
 MainWindow.xaml;Miner.xaml;Wallet.xaml;
 
-True
+False
 

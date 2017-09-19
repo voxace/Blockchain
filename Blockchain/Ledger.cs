@@ -56,24 +56,49 @@ namespace Blockchain
 			return balance;
 		}
 
-    }
+		public List<Transaction> getAllTransactions()
+		{
+			return transactions;
+		}
+
+	}
 
     public class Transaction
     {
-        public string sender;
-        public string recipient;
-        public double amount;
+        public string sender
+		{
+			get;
+			set;
+		}
+        public string recipient
+		{
+			get;
+			set;
+		}
+		public double amount
+		{
+			get;
+			set;
+		}
+		public string txid
+		{
+			get;
+			set;
+		}
 
-        public Transaction(string s, string r, double a)
+		public Transaction(string s, string r, double a, string t)
         {
             sender = s;
             recipient = r;
             amount = a;
+            txid = t;
         }
+
+
 
 		public string getTransaction()
         {
-            return sender + "," + recipient + "," + amount.ToString() + "\n"; 
-        }
+            return sender + "," + recipient + "," + amount.ToString() + "," + txid + "\n";
+        }		
     }
 }

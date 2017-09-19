@@ -70,35 +70,44 @@ namespace Blockchain
 			return currentBlock.data.getBalance(pubkey);
 		}
 
-		public static Tuple<bool, Transaction> SendTransaction(string sender, string recipient, double amount, string signature)
+		public Tuple<bool, string> SendTransaction(string sender, string recipient, double amount, string txid)
 		{
-			Transaction t = new Transaction(sender, recipient, amount);
-			
-			if (verifyTransaction(t))
-			{
-				return new Tuple<bool, Transaction>(true, t);
+			Transaction t = new Transaction(sender, recipient, amount, txid);
+			Tuple<bool, string> result = verifyTransaction(t);
+
+			if (result.Item1)
+			{				
+				newLedger.addTransaction(t);
 				// TODO: Transmit to network
+				return result;
 			}
 			else
 			{
-				return new Tuple<bool, Transaction>(false, t);
+				return result;
 			}
 		}
 
-		public static bool verifyTransaction(Transaction t)
+		public static Tuple<bool, string> verifyTransaction(Transaction t)
 		{
-			// check signature via asymmetric signature verification
-			
-
-
-			if (getBalance(t.sender) >= t.amount)
+            // check signature via asymmetric signature verification
+            if(Keys.VerifyData((t.sender + t.recipient + t.amount.ToString()), t.txid, t.sender))
 			{
-				return true;
+				if (getBalance(t.sender) >= t.amount)
+				{
+					return new Tuple<bool,string>(true, "Transaction ID " + t.txid + " successful verified.");
+				}
+				else
+				{
+					return new Tuple<bool, string>(false, "Transaction failed. Insufficient balance.");
+				}
 			}
 			else
 			{
-				return false;
+				return new Tuple<bool, string>(false, "Transaction failed. Invalid TXID.");
 			}
+            
+
+            
 		}
 
 		public void verifyTransactions(Transaction t)
