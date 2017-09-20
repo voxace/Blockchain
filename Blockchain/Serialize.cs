@@ -11,9 +11,7 @@ using Newtonsoft.Json;
 namespace Blockchain
 {
     class Serialize
-    {
-        static string _StartupXML = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "//Serialization.xml";
-        
+    {        
         public static void WriteBlock(Block data)
         {
             string index = data.index.ToString("0000000000");
@@ -21,6 +19,7 @@ namespace Blockchain
             //MessageBox.Show(json);
             File.WriteAllText(System.IO.Directory.GetCurrentDirectory() + "\\Chain\\" + index + ".json", JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented));
         }
+
         public static Block ReadBlock(string index)
         {
             Block b = new Block();

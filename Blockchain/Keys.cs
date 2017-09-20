@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace Blockchain
 {
@@ -81,24 +79,38 @@ namespace Blockchain
 			{
 				var encoder = new UTF8Encoding();
 				byte[] bytesToVerify = encoder.GetBytes(originalMessage);
-				byte[] signedBytes = Convert.FromBase64String(signedMessage);
-				try
+				if (IsBase64String(signedMessage))
 				{
-					rsa.ImportCspBlob(Convert.FromBase64String(publicKey));
-					SHA512Managed Hash = new SHA512Managed();
-					byte[] hashedData = Hash.ComputeHash(signedBytes);
-					success = rsa.VerifyData(bytesToVerify, CryptoConfig.MapNameToOID("SHA512"), signedBytes);
-				}
-				catch (CryptographicException e)
-				{
-					Console.WriteLine(e.Message);
-				}
-				finally
-				{
-					rsa.PersistKeyInCsp = false;
-				}
+					byte[] signedBytes = Convert.FromBase64String(signedMessage);
+
+					try
+					{
+						rsa.ImportCspBlob(Convert.FromBase64String(publicKey));
+						SHA512Managed Hash = new SHA512Managed();
+						byte[] hashedData = Hash.ComputeHash(signedBytes);
+						success = rsa.VerifyData(bytesToVerify, CryptoConfig.MapNameToOID("SHA512"), signedBytes);
+					}
+					catch (CryptographicException e)
+					{
+						Console.WriteLine(e.Message);
+					}
+					finally
+					{
+						rsa.PersistKeyInCsp = false;
+					}
+				}				
 			}
 			return success;
+		}
+
+		public static bool IsBase64String(string s)
+		{
+			if(s != null)
+			{
+				s = s.Trim();
+				return (s.Length % 4 == 0) && Regex.IsMatch(s, @"^[a-zA-Z0-9\+/]*={0,3}$", RegexOptions.None);
+			}
+			return false;
 		}
 
 		public static string createSig(string sender_pub_key, string recipient_pub_key, Double amount, string sender_private_key)

@@ -35,6 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="NetworkCommsDotNet">
       <HintPath>.\NetworkCommsDotNet.dll</HintPath>
     </Reference>
@@ -72,17 +73,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Accounts.cs" />
     <Compile Include="Keys.cs" />
     <Compile Include="Miner.xaml.cs">
       <DependentUpon>Miner.xaml</DependentUpon>
     </Compile>
     <Compile Include="Node.cs" />
     <Compile Include="Serialize.cs" />
+    <Compile Include="Transaction.cs" />
     <Compile Include="Wallet.xaml.cs">
       <DependentUpon>Wallet.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Explorer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -92,8 +93,8 @@
     </Compile>
     <Compile Include="Block.cs" />
     <Compile Include="Ledger.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="Explorer.xaml.cs">
+      <DependentUpon>Explorer.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Miner.xaml">

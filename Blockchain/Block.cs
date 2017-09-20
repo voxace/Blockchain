@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Security.Cryptography;
-using System.Windows;
-using System.Windows.Threading;
 
 namespace Blockchain
 {
@@ -14,26 +9,36 @@ namespace Blockchain
         public string previousHash;
         public int index;
         public DateTime timestamp;
-        public Ledger data;
+        public Ledger data;		
 
 		public Block()
-        {            
+        {
+
         }
 
-        public void newBlock(int i, DateTime t, Ledger d, string ph)
+		/// <summary>
+		/// Adds the initial data to the Block
+		/// </summary>
+		/// <param name="i">Index</param>
+		/// <param name="ph">Previous Hash</param>
+        public void NewBlock(int i, string ph)
         {
             previousHash = ph;
             index = i;
-            timestamp = t;
-            data = d;
+			timestamp = DateTime.Now.ToUniversalTime();
+            data = new Ledger();
         }
 
+		/// <summary>
+		/// Returns the hash of the data included in this Block
+		/// </summary>
+		/// <returns>Hash of the data in this block as a String</returns>
         public string HashBlock()
         {
             byte[] hash;
             string temp;
             SHA256Managed hasher = new SHA256Managed();
-            temp = index.ToString() + timestamp.ToString() + data.ToString() + previousHash;
+            temp = index.ToString() + timestamp.ToString() + data.getString() + previousHash;
             Byte[] byteArray = Encoding.UTF8.GetBytes(temp);
             hash = hasher.ComputeHash(byteArray);
             string hashString = string.Empty;
@@ -45,136 +50,48 @@ namespace Blockchain
         }
 
 		/// <summary>
-		/// Attempts to find the correct hash for the current block.
+		/// Adds the transaction to the block
 		/// </summary>
-		/// <param name="miningWindow">Shows the mining window if set to true.</param>
-		/// <returns>Returns true if this user successfully mined the block.</returns>
-		public async Task<bool> mineBlock(bool miningWindow)
+		/// <param name="transaction">The transaction to add</param>
+		public void AddTransaction(Transaction transaction)
 		{
-			int count = 0;
-			int count2 = 0;
-			string hashString = "1234567890";
-
-			DateTime start = DateTime.Now;
-			DateTime previous = DateTime.Now;
-
-			Miner mw = new Miner();
-
-			if (miningWindow)
-			{				
-				mw.Show();
-			}
-			
-
-			await Task.Run(() =>
-			{
-				while (hashString.Substring(0, 5) != "00000")
-				{
-					byte[] hash;
-					string temp;
-					SHA256Managed hasher = new SHA256Managed();
-					temp = count.ToString() + index.ToString() + timestamp.ToString() + data.ToString() + previousHash;
-					Byte[] byteArray = Encoding.UTF8.GetBytes(temp);
-					hash = hasher.ComputeHash(byteArray);
-
-					hashString = string.Empty;
-
-					foreach (byte x in hash)
-					{
-						hashString += String.Format("{0:x2}", x);
-					}
-
-					if(!miningWindow)
-					{
-						Console.WriteLine(count.ToString() + "  -  " + hashString);
-					}
-
-					if (miningWindow)
-					{
-
-						if (count % 1000 == 0)
-						{
-							mw.Dispatcher.Invoke(DispatcherPriority.Render, new Action(() =>
-							{
-								mw.ConsoleOutput.AppendText(Environment.NewLine + count.ToString() + " - " + hashString);
-								mw.ConsoleOutput.ScrollToEnd();
-							}));
-						}
-
-						DateTime elapsed = DateTime.Now;
-
-						if (elapsed.Subtract(previous).TotalMilliseconds >= 1000)
-						{
-							mw.Dispatcher.Invoke(DispatcherPriority.Render, new Action(() =>
-							{
-								mw.speedWindow.Text = (count2 / 1000).ToString() + " KH/sec";
-							}));
-
-							count2 = 0;
-							previous = DateTime.Now;
-						}
-					}
-					
-					count++;
-					count2++;
-				}
-			});
-
-			if (miningWindow)
-			{
-				mw.Dispatcher.Invoke(DispatcherPriority.Render, new Action(() =>
-				{
-					mw.ConsoleOutput.AppendText(Environment.NewLine + count.ToString() + " - " + hashString);
-					mw.ConsoleOutput.ScrollToEnd();
-				}));
-			}
-
-			DateTime finish = DateTime.Now;
-			Double duration = finish.Subtract(start).TotalSeconds;
-
-			mw.ConsoleOutput.AppendText(Environment.NewLine + "Block time: " + duration.ToString() + " Seconds. Average speed: " + ((count / duration) / 1000).ToString("N2") + " KH/sec.");
-
-			return true;
-
+			data.AddTransaction(transaction);
 		}
 
-        public static void saveBlock(Block b)
-        {
-            Serialize.WriteBlock(b);
-        }
-
-		// Adds the transaction to the current ledger
-		// public void addTransaction(string sender, string recipient, float amount, string private_key)
-		// {
-		//		string txid = Keys.SignData((sender + recipient + amount.ToString()), private_key);
-		//		Transaction temp = new Transaction(sender, recipient, amount, txid);
-		//		if (Node.verifyTransaction(temp))
-		//		{
-		//			data.addTransaction(temp);
-		//		}
-		// }
-
+		/// <summary>
+		/// Returns the complete Ledger for this Block
+		/// </summary>
+		/// <returns>Complete Ledger of this Block</returns>
 		public Ledger GetData()
 		{
 			return data;
 		}
 
+		/// <summary>
+		/// Returns the index of this Block
+		/// </summary>
+		/// <returns></returns>
 		public int getIndex()
 		{
 			return index;
 		}
 
+		/// <summary>
+		/// Returns the hash of the previous Block
+		/// </summary>
+		/// <returns></returns>
 		public string getPreviousHash()
 		{
 			return previousHash;
 		}
 
+		/// <summary>
+		/// Returns the timestamp of this Block
+		/// </summary>
+		/// <returns></returns>
 		public DateTime getTimestamp()
 		{
 			return timestamp;
 		}
-
-		// TODO: rewardMiner(pubkey)
-		// Rewards the miner of the current block with the current block reward
     }
 }
