@@ -1,14 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using NetworkCommsDotNet;
+using NetworkCommsDotNet.Connections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using System.Windows;
+using System.Net;
+using NetworkCommsDotNet.Connections.UDP;
 
 namespace Blockchain
 {
+	// TODO: Interaction between peers, consensus about longest valid chain
+	// TODO: Transition from UDP to TCP. Use UDP for peer discovery, build list of peers for P2P
+	// TODO: Ability to download blockchain from peers, rather than relying on loading from directory
+	// TODO: Check loaded blockchain from directory against longest chain on network (match hashes)
+
 	class Node
 	{
 		public Block currentBlock;
@@ -21,8 +30,13 @@ namespace Blockchain
 
 		public Node()
 		{
-			
-		}
+			//Trigger the correct method when a certain packet type is received
+			NetworkComms.AppendGlobalIncomingPacketHandler<string>("SendTransaction", ReceiveTransaction);
+			NetworkComms.AppendGlobalIncomingPacketHandler<string>("SendBlock", ReceiveBlock);
+
+			// Start listening for UDP packets
+			Connection.StartListening(ConnectionType.UDP, new IPEndPoint(IPAddress.Any, 10000));
+		}		
 
 		private Block LoadGenesisBlock()
 		{
@@ -110,9 +124,12 @@ namespace Blockchain
 			Tuple<bool, string> result = verifyTransaction(t);
 
 			if (result.Item1)
-			{				
-				currentBlock.AddTransaction(t);
-				// TODO: Transmit to network
+			{	
+				// Add transaction to current block
+				currentBlock.AddTransaction(t,chain);
+
+				// Broadcast transaction to network
+				SendTransaction(t);
 				return result;
 			}
 			else
@@ -153,6 +170,61 @@ namespace Blockchain
 				currentBlock.data.removeTransaction(t);
 			}
 		}
+
+		#region Networking
+		// Broadcast to network
+		public void SendTransaction(Transaction transaction)
+		{
+			// Serialize transaction as JSON data first
+			string tx = Serialize.SerializeTransaction(transaction);
+
+			// Broadcast to network via UDP
+			UDPConnection.SendObject("SendTransaction", tx, new IPEndPoint(IPAddress.Broadcast, 10000));
+
+			// Show confirmation
+			MessageBox.Show("Transaction Sent with TXID: \n\n" + transaction.txid);
+		}
+
+		public void SendBlock(Block block)
+		{
+			// Serialize transaction as JSON data first
+			string blk = Serialize.SerializeBlock(block);
+
+			// Broadcast to network via UDP
+			UDPConnection.SendObject("SendBlock", blk, new IPEndPoint(IPAddress.Broadcast, 10000));
+
+			// Show confirmation
+			MessageBox.Show("Transaction Sent with TXID: \n\n" + block.HashBlock());
+		}
+
+		// Receive from network - add transaction to currentBlock
+		private void ReceiveTransaction(PacketHeader packetHeader, Connection connection, string incomingObject)
+		{
+			// Deserialize JSON data that is received
+			Transaction transaction = Serialize.DeserializeTransaction(incomingObject);
+
+			// Testing
+			MessageBox.Show("Transaction Received with TXID: \n\n" + transaction.txid);
+
+			// Verify data signature and account balance
+			Tuple<bool, string> result = verifyTransaction(transaction);
+
+			if (result.Item1)
+			{
+				// Add transaction to current block
+				currentBlock.AddTransaction(transaction, chain);
+			}
+		}
+
+		private void ReceiveBlock(PacketHeader packetHeader, Connection connection, string incomingObject)
+		{
+			// Deserialize JSON data that is received
+			Block block = Serialize.DeserializeBlock(incomingObject);
+
+			// Testing
+			MessageBox.Show("Block Received with Hash: \n\n" + block.HashBlock());
+		}
+		#endregion
 
 		/// <summary>
 		/// Attempts to find the correct hash for the current block.
@@ -243,7 +315,7 @@ namespace Blockchain
 
 				// Include mining reward in block
 				Transaction reward = new Transaction("miningReward", miner_id, MiningReward(), HashCount(count));
-				currentBlock.AddTransaction(reward);
+				currentBlock.AddTransaction(reward,chain);
 
 				// Add block to chain
 				Serialize.WriteBlock(currentBlock);

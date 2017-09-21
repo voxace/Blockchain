@@ -11,9 +11,22 @@ namespace Blockchain
 
         }
 
-        public void AddTransaction(Transaction t)
+        public void AddTransaction(Transaction transaction)
         {
-            transactions.Add(t);
+			bool match = false;
+			foreach (Transaction t in transactions)
+			{				
+				if(t.txid == transaction.txid)
+				{
+					// Transaction alredy exists in current ledger, don't add
+					match = true;
+				}
+			}
+			if(match == false)
+			{
+				// Transaction is new, add to ledger
+				transactions.Add(transaction);
+			}            
         }
 
 		public void removeTransaction(Transaction t)

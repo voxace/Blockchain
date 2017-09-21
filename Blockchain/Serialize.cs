@@ -16,7 +16,6 @@ namespace Blockchain
         {
             string index = data.index.ToString("0000000000");
             string json = JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented);
-            //MessageBox.Show(json);
             File.WriteAllText(System.IO.Directory.GetCurrentDirectory() + "\\Chain\\" + index + ".json", JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented));
         }
 
@@ -30,5 +29,31 @@ namespace Blockchain
             }
             return b;
         }
-    }
+
+		public static string SerializeTransaction(Transaction transaction)
+		{
+			return JsonConvert.SerializeObject(transaction, Newtonsoft.Json.Formatting.Indented);
+		}
+
+		public static Transaction DeserializeTransaction(string data)
+		{
+			Transaction transaction = new Transaction();
+			JsonSerializer serializer = new JsonSerializer();
+			transaction = JsonConvert.DeserializeObject<Transaction>(data);
+			return transaction;
+		}
+
+		public static string SerializeBlock(Block block)
+		{
+			return JsonConvert.SerializeObject(block, Newtonsoft.Json.Formatting.Indented);
+		}
+
+		public static Block DeserializeBlock(string data)
+		{
+			Block block = new Block();
+			JsonSerializer serializer = new JsonSerializer();
+			block = JsonConvert.DeserializeObject<Block>(data);
+			return block;
+		}
+	}
 }

@@ -32,7 +32,6 @@ C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\bin\Debug\Blockchain.exe.
 C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\Blockchain.exe
 C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\Blockchain.pdb
 C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\Blockchain.csprojResolveAssemblyReference.cache
-C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\MainWindow.g.cs
 C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\Wallet.g.cs
 C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\App.g.cs
 C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\Blockchain_MarkupCompile.cache
@@ -41,7 +40,6 @@ C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\bin\Debug\Blockchain.exe
 C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\bin\Debug\Blockchain.pdb
 C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\bin\Debug\QRCoder.dll
 C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\bin\Debug\UnityEngine.dll
-C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\MainWindow.baml
 C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\Wallet.baml
 C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\Blockchain.g.resources
 C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\Blockchain.Properties.Resources.resources
@@ -61,3 +59,7 @@ C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\App.baml
 D:\Google Drive\Blockchain\Blockchain\obj\Debug\Explorer.g.cs
 D:\Google Drive\Blockchain\Blockchain\obj\Debug\Explorer.baml
 D:\Google Drive\Blockchain\Blockchain\obj\Debug\Blockchain.csprojResolveAssemblyReference.cache
+C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\Explorer.g.cs
+C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\Explorer.baml
+C:\Users\dsteedman1\Google Drive\Blockchain\Blockchain\obj\Debug\Blockchain.csproj.CoreCompileInputs.cache
+D:\Google Drive\Blockchain\Blockchain\bin\Debug\InTheHand.Net.Personal.dll

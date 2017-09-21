@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Blockchain"
         mc:Ignorable="d"
-        Title="Miner" Height="600" Width="603">
+        Title="Miner" Height="600" Width="603" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner">
     <Grid Background="Black">
         <RichTextBox x:Name="ConsoleOutput" HorizontalAlignment="Left" Height="519" 
                      VerticalAlignment="Top" Width="595" Background="Black" Foreground="Lime" BorderBrush="{x:Null}" 

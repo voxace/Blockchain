@@ -23,6 +23,11 @@
 			set;
 		}
 
+		public Transaction()
+		{
+
+		}
+
 		public Transaction(string _sender, string _recipient, double _amount, string _txid)
 		{
 			sender = _sender;

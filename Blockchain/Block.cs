@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Security.Cryptography;
+using System.Collections.Generic;
 
 namespace Blockchain
 {
@@ -53,9 +54,26 @@ namespace Blockchain
 		/// Adds the transaction to the block
 		/// </summary>
 		/// <param name="transaction">The transaction to add</param>
-		public void AddTransaction(Transaction transaction)
+		public void AddTransaction(Transaction transaction, List<Block> chain)
 		{
-			data.AddTransaction(transaction);
+			bool match = false;
+			foreach(Block b in chain)
+			{
+				foreach(Transaction t in data.transactions)
+				{
+					if(t.txid == transaction.txid)
+					{
+						// Transaction already included
+						match = true;
+					}
+				}
+			}
+			if(!match)
+			{
+				// Add the transaction since it does not exist in chain
+				data.AddTransaction(transaction);
+			}
+			
 		}
 
 		/// <summary>
