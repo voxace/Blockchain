@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Blockchain"
         mc:Ignorable="d" Title="Blockchain Explorer" 
         Height="800" Width="1200" WindowStartupLocation="CenterScreen"
-        MinHeight="700" MinWidth="960" Loaded="Window_Loaded" Closed="Window_Closed">
+        MinHeight="720" MinWidth="960" Loaded="Window_Loaded" Closed="Window_Closed">
     <Window.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -69,6 +69,7 @@
             <RowDefinition Height="90"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
         <!-- HEADER -->
@@ -145,17 +146,17 @@
                 <TextBox x:Name="PubKeyGetBalanceTextBox" Grid.Row="3" Grid.Column="3" FontFamily="Century Gothic" BorderBrush="Black" Background="#FF646478" FontSize="14" TabIndex="3" Margin="0,5,25,5" VerticalContentAlignment="Center"/>
                 <Button x:Name="Get_Balance" Content="Get Balance" Grid.Row="4" Grid.Column="3" Click="GetBalance_Click" FontFamily="Century Gothic" Background="#FF37374D" 
                         FontSize="16" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" TabIndex="5" Margin="0,5,25,5"/>
-                
+
                 <!--Index-->
                 <Label Grid.Column="0" Grid.Row="6" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Index:" Foreground="White" FontSize="14"/>
                 <TextBox x:Name="indexTextBox" Grid.Row="6" Grid.Column="1" BorderBrush="Black" FontFamily="Century Gothic" Background="#FFA0A0B4" FontSize="14" 
                          TabIndex="6" Focusable="False" AllowDrop="False" IsTabStop="False" IsEnabled="False" Margin="0,5,5,5"  VerticalContentAlignment="Center"/>
-                
+
                 <!--Previous Hash-->
                 <Label Grid.Row="6" Grid.Column="2" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Previous Hash:" Foreground="White" FontSize="14"/>
                 <TextBox x:Name="previousHashTextBox" Grid.Row="6" Grid.Column="3" Grid.RowSpan="2" BorderBrush="Black" FontFamily="Century Gothic" Background="#FFA0A0B4" 
                          FontSize="14" Focusable="False" AllowDrop="False" IsTabStop="False" IsEnabled="False" Margin="0,5,25,5" TextWrapping="Wrap" VerticalContentAlignment="Center"/>
-                
+
                 <!--Timestamp-->
                 <Label Grid.Row="7" Grid.Column="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Content="Timestamp:" Foreground="White" FontSize="14"/>
                 <TextBox x:Name="timestampTextBox" Grid.Row="7" Grid.Column="1" BorderBrush="Black" FontFamily="Century Gothic" Background="#FFA0A0B4" FontSize="14" TabIndex="4" 
@@ -246,7 +247,7 @@
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                
+
                 <!--Add New Block-->
                 <Button x:Name="LaunchMinerButton" Content="Start Mining" Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5,25,25" FontFamily="Century Gothic" 
                         Background="#FF37374D" FontSize="16" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" Click="LaunchMinerButton_Click" TabIndex="6"/>
@@ -257,16 +258,49 @@
         <Grid Grid.Row="2" Margin="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="5*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <Button Content="Previous" Grid.Column="0" x:Name="PreviousButton" Click="PreviousButton_Click" IsEnabled="False" Background="#FF37374D" FontSize="16" 
+            <Button Content="&#xE100;" Grid.Column="0" x:Name="FirstButton" IsEnabled="True" Background="#FF37374D" FontSize="16" Click="FirstButton_Click" Margin="5,0,0,0"
+                    Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" VerticalAlignment="Stretch" FontFamily="Segoe UI Symbol" />
+            
+            <Button Content="Previous" Grid.Column="1" x:Name="PreviousButton" Click="PreviousButton_Click" IsEnabled="False" Background="#FF37374D" FontSize="16" 
                     Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" VerticalAlignment="Stretch"/>
-            <Button Content="Next" Grid.Column="1" x:Name="NextButton" Click="NextButton_Click" IsEnabled="False" Background="#FF37374D" FontSize="16" 
+            
+            <Button Content="Next" Grid.Column="2" x:Name="NextButton" Click="NextButton_Click" IsEnabled="False" Background="#FF37374D" FontSize="16" 
                     Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" VerticalAlignment="Stretch"/>
+
+            <Button Content="&#xE101;" Grid.Column="3" x:Name="LastButton" IsEnabled="True" Background="#FF37374D" FontSize="16" Click="LastButton_Click" Margin="0,0,5,0"
+                    Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle1}" VerticalAlignment="Stretch" FontFamily="Segoe UI Symbol" />
         </Grid>
 
+        <!--FOOTER-->
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center" Margin="5,0,0,0">
+                <Label Content="Height: " Foreground="White" FontFamily="Century Gothic" />
+                <Label Content="0" x:Name="CurrentBlockHeightLabel" Foreground="White" FontFamily="Century Gothic" HorizontalAlignment="Right" HorizontalContentAlignment="Left"/>
+                <Label Content="/" Foreground="White" FontFamily="Century Gothic" />
+                <Label Content="0" x:Name="TotalBlockHeightLabel" Foreground="White" FontFamily="Century Gothic" HorizontalAlignment="Left" HorizontalContentAlignment="Left"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Center">
+                <Label Content="Connected Peers: " Foreground="White" FontFamily="Century Gothic" />
+                <Label Content="0" x:Name="ConnectedPeersLabel" Foreground="White" FontFamily="Century Gothic" HorizontalAlignment="Right" HorizontalContentAlignment="Left"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Grid.Column="2" VerticalAlignment="Center" Margin="0,0,6,0" HorizontalAlignment="Right">
+                <Label Content="Waiting for next block: " Foreground="White" FontFamily="Century Gothic" />
+                <ProgressBar Width="200" Margin="0,2" IsIndeterminate="true" Foreground="#FF37374D" Background="#FF646478" BorderBrush="Black"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

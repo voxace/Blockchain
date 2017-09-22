@@ -55,5 +55,39 @@ namespace Blockchain
 			block = JsonConvert.DeserializeObject<Block>(data);
 			return block;
 		}
+
+		public static string SerializePeers(Peers peers)
+		{
+			return JsonConvert.SerializeObject(peers, Newtonsoft.Json.Formatting.Indented);
+		}
+
+		public static Peers DeserializePeers(string data)
+		{
+			Peers peers = new Peers();
+			JsonSerializer serializer = new JsonSerializer();
+			peers = JsonConvert.DeserializeObject<Peers>(data);
+			return peers;
+		}
+
+		public static void WritePeers(Peers peers)
+		{
+			File.WriteAllText(System.IO.Directory.GetCurrentDirectory() + "peers.json", SerializePeers(peers));
+		}
+
+		public static Peers ReadPeers()
+		{
+			string path = System.IO.Directory.GetCurrentDirectory() + "peers.json";
+			Peers peers = new Peers();
+			if(File.Exists(path) == false)
+			{
+				File.Create(path);
+			}
+			using (StreamReader file = File.OpenText(path))
+			{
+				JsonSerializer serializer = new JsonSerializer();
+				peers = (Peers)serializer.Deserialize(file, typeof(Peers));
+			}
+			return peers;
+		}
 	}
 }

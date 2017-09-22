@@ -135,5 +135,36 @@ namespace Blockchain
 				LaunchMinerButton.Content = "Stop Mining";
 			}			
 		}
+
+		private void FirstButton_Click(object sender, RoutedEventArgs e)
+		{
+			blockIndex = 0;
+			ShowBlockInfo(blockIndex);
+			PreviousButton.IsEnabled = false;
+			if (blockIndex == node.chain.Count() - 1)
+			{
+				NextButton.IsEnabled = false;
+			}
+			else
+			{
+				NextButton.IsEnabled = true;
+			}
+		}
+
+		private void LastButton_Click(object sender, RoutedEventArgs e)
+		{
+			blockIndex = node.chain.Count() - 1;
+			ShowBlockInfo(blockIndex);
+			NextButton.IsEnabled = false;
+			if (blockIndex == 0)
+			{
+				PreviousButton.IsEnabled = false;
+			}
+			else
+			{
+				PreviousButton.IsEnabled = true;
+			}
+		}
+
 	}
 }

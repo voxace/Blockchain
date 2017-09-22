@@ -23,6 +23,7 @@ namespace Blockchain
 		public Block currentBlock;
 		public Block previousBlock;
 		public List<Block> chain = new List<Block>();
+		public Network network = new Network();
 		public int blockHeight = 0;
 		public Miner mw = new Miner();
 		public bool mining = false;
@@ -32,10 +33,10 @@ namespace Blockchain
 		{
 			//Trigger the correct method when a certain packet type is received
 			NetworkComms.AppendGlobalIncomingPacketHandler<string>("SendTransaction", ReceiveTransaction);
-			NetworkComms.AppendGlobalIncomingPacketHandler<string>("SendBlock", ReceiveBlock);
+			NetworkComms.AppendGlobalIncomingPacketHandler<string>("SendBlock", ReceiveBlock);			
 
-			// Start listening for UDP packets
-			Connection.StartListening(ConnectionType.UDP, new IPEndPoint(IPAddress.Any, 10000));
+			//Start listening for incoming connections
+			Connection.StartListening(ConnectionType.TCP, new System.Net.IPEndPoint(System.Net.IPAddress.Any, 9999));
 		}		
 
 		private Block LoadGenesisBlock()
@@ -127,7 +128,7 @@ namespace Blockchain
 			{	
 				// Add transaction to current block
 				currentBlock.AddTransaction(t,chain);
-
+				
 				// Broadcast transaction to network
 				SendTransaction(t);
 				return result;
@@ -179,7 +180,10 @@ namespace Blockchain
 			string tx = Serialize.SerializeTransaction(transaction);
 
 			// Broadcast to network via UDP
-			UDPConnection.SendObject("SendTransaction", tx, new IPEndPoint(IPAddress.Broadcast, 10000));
+			//UDPConnection.SendObject("SendTransaction", tx, new IPEndPoint(IPAddress.Broadcast, 10000));
+
+			// Broadcast to network via TCP
+			network.SendTransaction(tx);
 
 			// Show confirmation
 			MessageBox.Show("Transaction Sent with TXID: \n\n" + transaction.txid);
@@ -191,7 +195,7 @@ namespace Blockchain
 			string blk = Serialize.SerializeBlock(block);
 
 			// Broadcast to network via UDP
-			UDPConnection.SendObject("SendBlock", blk, new IPEndPoint(IPAddress.Broadcast, 10000));
+			//UDPConnection.SendObject("SendBlock", blk, new IPEndPoint(IPAddress.Broadcast, 10000));
 
 			// Show confirmation
 			MessageBox.Show("Transaction Sent with TXID: \n\n" + block.HashBlock());
