@@ -33,11 +33,19 @@ namespace Blockchain
 		{
 			//Trigger the correct method when a certain packet type is received
 			NetworkComms.AppendGlobalIncomingPacketHandler<string>("SendTransaction", ReceiveTransaction);
-			NetworkComms.AppendGlobalIncomingPacketHandler<string>("SendBlock", ReceiveBlock);			
-
+			NetworkComms.AppendGlobalIncomingPacketHandler<string>("SendBlock", ReceiveBlock);
+			NetworkComms.AppendGlobalIncomingPacketHandler<string>("PeerList", ReceivePeers);
+		
 			//Start listening for incoming connections
 			Connection.StartListening(ConnectionType.TCP, new System.Net.IPEndPoint(System.Net.IPAddress.Any, 9999));
-		}		
+		}
+
+		private void ReceivePeers(PacketHeader packetHeader, Connection connection, string peer_list)
+		{
+			Peers new_peers = Serialize.DeserializePeers(peer_list);
+			MessageBox.Show("Receiving peer list from: " + new_peers.ip_address + "\n\n" + peer_list);
+			network.NewPeers(new_peers);
+		}
 
 		private Block LoadGenesisBlock()
 		{
@@ -58,8 +66,8 @@ namespace Blockchain
 					Block b = Serialize.ReadBlock(index);
 					if (blockHeight > 0)
 					{
-						MessageBox.Show(chain.ElementAt(blockHeight - 1).data.getString());
-						MessageBox.Show(chain.ElementAt(blockHeight - 1).HashBlock() + "\n\n" + b.previousHash);
+						// Testing: Compare hashes
+						// MessageBox.Show(chain.ElementAt(blockHeight - 1).HashBlock() + "\n\n" + b.previousHash);
 
 						// Check to see if blockchain was tampered with
 						if (b.previousHash != chain.ElementAt(blockHeight - 1).HashBlock())
@@ -345,6 +353,7 @@ namespace Blockchain
 			return 1.0;
 		}
 
+		// Hashes the nonce
 		public string HashCount(int count)
 		{
 			byte[] hash;

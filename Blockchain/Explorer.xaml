@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Blockchain" x:Name="ExplorerWindow"
         mc:Ignorable="d" Title="Blockchain Explorer" 
         Height="800" Width="1200" WindowStartupLocation="CenterScreen"
-        MinHeight="720" MinWidth="960" Loaded="Window_Loaded" Closed="Window_Closed">
+        MinHeight="720" MinWidth="960" Loaded="Window_Loaded" Closed="Window_Closed" Closing="ExplorerWindow_Closing">
     <Window.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">

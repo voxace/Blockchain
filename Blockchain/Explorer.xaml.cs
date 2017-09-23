@@ -174,5 +174,9 @@ namespace Blockchain
 			}
 		}
 
+		private void ExplorerWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			node.network.SavePeers();
+		}
 	}
 }

@@ -43,9 +43,12 @@ namespace Blockchain
 			// Convert contents of block to a string
 			System.Text.StringBuilder temp = new System.Text.StringBuilder();
 			temp.Append(index.ToString());
-			temp.Append(timestamp.ToUniversalTime().ToString());
+			temp.Append(getTimeString());
 			temp.Append(data.getString());
 			temp.Append(previousHash);
+
+			// Testing: See contents of string
+			// MessageBox.Show("Stringbuilder: \n\n" + temp.ToString());
 
 			// Compute hash
 			Byte[] byteArray = Encoding.UTF8.GetBytes(temp.ToString());
@@ -128,7 +131,7 @@ namespace Blockchain
 		/// <returns></returns>
 		public string getTimeString()
 		{
-			return timestamp.ToString("yyyy/MM/dd HH:mm:ss");
+			return timestamp.ToString("yyyy-MM-dd HH:mm:ss");
 		}
 	}
 }
