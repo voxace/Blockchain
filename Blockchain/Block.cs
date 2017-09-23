@@ -2,6 +2,7 @@
 using System.Text;
 using System.Security.Cryptography;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace Blockchain
 {
@@ -37,17 +38,26 @@ namespace Blockchain
         public string HashBlock()
         {
             byte[] hash;
-            string temp;
             SHA256Managed hasher = new SHA256Managed();
-            temp = index.ToString() + timestamp.ToString() + data.getString() + previousHash;
-            Byte[] byteArray = Encoding.UTF8.GetBytes(temp);
-            hash = hasher.ComputeHash(byteArray);
-            string hashString = string.Empty;
-            foreach (byte x in hash)
+
+			// Convert contents of block to a string
+			System.Text.StringBuilder temp = new System.Text.StringBuilder();
+			temp.Append(index.ToString());
+			temp.Append(timestamp.ToUniversalTime().ToString());
+			temp.Append(data.getString());
+			temp.Append(previousHash);
+
+			// Compute hash
+			Byte[] byteArray = Encoding.UTF8.GetBytes(temp.ToString());
+            hash = hasher.ComputeHash(byteArray, 0, Encoding.UTF8.GetByteCount(temp.ToString()));
+			System.Text.StringBuilder hashString = new System.Text.StringBuilder();
+			foreach (byte x in hash)
             {
-                hashString += String.Format("{0:x2}", x);
-            }
-            return hashString;
+				hashString.Append(x.ToString("x2"));
+			}
+
+			// Return the computed hash
+            return hashString.ToString();
         }
 
 		/// <summary>
@@ -111,5 +121,14 @@ namespace Blockchain
 		{
 			return timestamp;
 		}
-    }
+
+		/// <summary>
+		/// Returns the timestamp in a specific string format that will ensure compatibility across all systems
+		/// </summary>
+		/// <returns></returns>
+		public string getTimeString()
+		{
+			return timestamp.ToString("yyyy/MM/dd HH:mm:ss");
+		}
+	}
 }

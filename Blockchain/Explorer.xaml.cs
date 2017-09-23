@@ -20,6 +20,14 @@ namespace Blockchain
 		public BlockChainExplorer()
         {
             InitializeComponent();
+
+			// Adjust height to fit smaller screens
+			if(System.Windows.SystemParameters.PrimaryScreenWidth < 1200 || System.Windows.SystemParameters.PrimaryScreenHeight < 800)
+			{
+				ExplorerWindow.Width = System.Windows.SystemParameters.PrimaryScreenWidth * 0.8;
+				ExplorerWindow.Height = System.Windows.SystemParameters.PrimaryScreenHeight * 0.9;
+			}
+			
 		}
 
 		private async void Window_Loaded(object sender, RoutedEventArgs e)

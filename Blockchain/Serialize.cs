@@ -71,17 +71,13 @@ namespace Blockchain
 
 		public static void WritePeers(Peers peers)
 		{
-			File.WriteAllText(System.IO.Directory.GetCurrentDirectory() + "peers.json", SerializePeers(peers));
+			File.WriteAllText(System.IO.Directory.GetCurrentDirectory() + "\\peers.json", SerializePeers(peers));
 		}
 
 		public static Peers ReadPeers()
 		{
-			string path = System.IO.Directory.GetCurrentDirectory() + "peers.json";
+			string path = System.IO.Directory.GetCurrentDirectory() + "\\peers.json";
 			Peers peers = new Peers();
-			if(File.Exists(path) == false)
-			{
-				File.Create(path);
-			}
 			using (StreamReader file = File.OpenText(path))
 			{
 				JsonSerializer serializer = new JsonSerializer();

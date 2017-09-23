@@ -37,7 +37,7 @@
 		}
 
 		public string GetTransactionString()
-		{
+		{			
 			return sender + "," + recipient + "," + amount.ToString() + "," + txid + "\n";
 		}
 	}

@@ -36,12 +36,12 @@ namespace Blockchain
 
         public string getString()
         {
-            string data = "";
-            foreach (Transaction t in transactions)
+			System.Text.StringBuilder data = new System.Text.StringBuilder();
+			foreach (Transaction t in transactions)
             {
-                data += t.GetTransactionString();
-            }
-            return data;
+				data.Append(t.GetTransactionString());
+			}
+            return data.ToString();
         }
 
 		public double getBalance(string pubKey)

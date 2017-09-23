@@ -58,11 +58,14 @@ namespace Blockchain
 					Block b = Serialize.ReadBlock(index);
 					if (blockHeight > 0)
 					{
+						MessageBox.Show(chain.ElementAt(blockHeight - 1).data.getString());
+						MessageBox.Show(chain.ElementAt(blockHeight - 1).HashBlock() + "\n\n" + b.previousHash);
+
 						// Check to see if blockchain was tampered with
 						if (b.previousHash != chain.ElementAt(blockHeight - 1).HashBlock())
-						{
+						{							
 							MessageBox.Show("Chain has been modified. Exiting...");
-							break;
+							//break;
 						}
 					}
 					
@@ -91,7 +94,7 @@ namespace Blockchain
 		public Tuple<string,string,string> queryBlockInfo(int index)
 		{
 			string data = chain.ElementAt(index).GetData().getString();
-			string timestamp = chain.ElementAt(index).getTimestamp().ToUniversalTime().ToString();
+			string timestamp = chain.ElementAt(index).getTimeString();
 			string previousHash = chain.ElementAt(index).getPreviousHash();
 			return new Tuple<string, string, string>(data, timestamp, previousHash);
 		}
@@ -266,7 +269,7 @@ namespace Blockchain
 					byte[] hash;
 					string temp;
 					SHA256Managed hasher = new SHA256Managed();
-					temp = count.ToString() + previousBlock.index.ToString() + previousBlock.timestamp.ToString() + previousBlock.data.ToString() + previousBlock.previousHash;
+					temp = count.ToString() + previousBlock.index.ToString() + previousBlock.getTimeString() + previousBlock.data.ToString() + previousBlock.previousHash;
 					Byte[] byteArray = Encoding.UTF8.GetBytes(temp);
 					hash = hasher.ComputeHash(byteArray);
 

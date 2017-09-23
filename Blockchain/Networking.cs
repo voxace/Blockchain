@@ -57,22 +57,26 @@ namespace Blockchain
 
 		private void CheckPeersOnline()
 		{
-			foreach(Peer peer in peers.peers_list)
+			if (peers != null)
 			{
-				ConnectionInfo connInfo = new ConnectionInfo(peer.ip_address, serverPort);
-				peer.conn = TCPConnection.GetConnection(connInfo);
-				
-				if (peer.conn.ConnectionAlive(100))
+				foreach (Peer peer in peers.peers_list)
 				{
-					MessageBox.Show("Connection to " + peer.ip_address.ToString() + " is alive.");
-					peer.last_seen = DateTime.UtcNow;
-					peer.connected = true;
-				}
-				else
-				{
-					peer.connected = false;
+					ConnectionInfo connInfo = new ConnectionInfo(peer.ip_address, serverPort);
+					peer.conn = TCPConnection.GetConnection(connInfo);
+
+					if (peer.conn.ConnectionAlive(100))
+					{
+						MessageBox.Show("Connection to " + peer.ip_address.ToString() + " is alive.");
+						peer.last_seen = DateTime.UtcNow;
+						peer.connected = true;
+					}
+					else
+					{
+						peer.connected = false;
+					}
 				}
 			}
+			
 		}
 
 		private void LoadPeers()
@@ -83,12 +87,15 @@ namespace Blockchain
 		private int CountPeersOnline()
 		{
 			int count = 0;
-			foreach (Peer peer in peers.peers_list)
-			{				
-				if (peer.connected)
+			if (peers != null)
+			{
+				foreach (Peer peer in peers.peers_list)
 				{
-					count++;
-				}				
+					if (peer.connected)
+					{
+						count++;
+					}
+				}
 			}
 			return count;
 		}
@@ -97,6 +104,9 @@ namespace Blockchain
 		{
 			// Announces IP address over UDP, expect nodes to respond with list of peers
 			UDPConnection.SendObject("Announce", CurrentIPAddress(), new IPEndPoint(IPAddress.Broadcast, 8888));
+
+			// change to always annouce peer list, even if empty
+			// the more peers are connected, the less frequent the announces
 		}
 
 		private void AnnounceReply(PacketHeader packetHeader, Connection connection, string incomingObject)
@@ -106,7 +116,8 @@ namespace Blockchain
 			{
 				// Sends TCP Packet containing list of peers in JSON format to IP address that announced itself
 				NetworkComms.SendObject("PeerList", incomingObject, serverPort, Serialize.SerializePeers(peers));
-			}			
+			}	
+			// merge peer list from sender here
 		}
 
 		public void SortPeers()
