@@ -1,0 +1,21 @@
+{
+  "previousHash": "7e0d33359f617b83ec4e91aada9fcc6a6f969015e0aacc18cf42ca47e14417a6",
+  "index": 7,
+  "timestamp": "2017-09-24T11:49:12.6006945Z",
+  "data": {
+    "transactions": [
+      {
+        "sender": "BgIAAACkAABSU0ExAAQAAAEAAQA/KlTgRpoq4gx6RQFiPz+1FAEq5VOUZrfOWJ593nwm7gjsV6x+uxEJRScSLOmBda2PEmVTlFim2Y/Aund29KDXryz16sl6719hR3qZVUkEohAbvPayDJ7r70EAM+oGAU8KiPnyoQqF6bLexEE9yXtA39q94KTPMC4wT7jIhi1E9Q==",
+        "recipient": "BgIAAACkAABSU0ExAAQAAAEAAQA/KlTgRpoq4gx6RQFiPz+1FAEq5VOUZrfOWJ593nwm7gjsV6x+uxEJRScSLOmBda2PEmVTlFim2Y/Aund29KDXryz16sl6719hR3qZVUkEohAbvPayDJ7r70EAM+oGAU8KiPnyoQqF6bLexEE9yXtA39q94KTPMC4wT7jIhi1E9Q==",
+        "amount": 1.0,
+        "txid": "yRgmA55qeWWgB4xe821IfjHsfgFWcPmYM7658K8n7K2g0JCRB20Xz78yHM060LTwaLb0dCopV3J4srqAAf0Q4GhdUNVgwEJnWtQ6Na2ofPGfiw1qVVAYhGtPJNFfzHakXQLXzHXcATIQShOcNQrgjN2gbGv7IpkVXW99arnugHM="
+      },
+      {
+        "sender": "miningReward",
+        "recipient": "BgIAAACkAABSU0ExAAQAAAEAAQA/KlTgRpoq4gx6RQFiPz+1FAEq5VOUZrfOWJ593nwm7gjsV6x+uxEJRScSLOmBda2PEmVTlFim2Y/Aund29KDXryz16sl6719hR3qZVUkEohAbvPayDJ7r70EAM+oGAU8KiPnyoQqF6bLexEE9yXtA39q94KTPMC4wT7jIhi1E9Q==",
+        "amount": 1.0,
+        "txid": "b257326de3ad45147f4c66a909549937d08270630851e97cedc4f92de828dc83"
+      }
+    ]
+  }
+}

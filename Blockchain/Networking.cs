@@ -33,7 +33,9 @@ namespace Blockchain
 		private List<Peers> merging_now = new List<Peers>();
 		public int connectedPeers = 0;
 		static Timer timer;
-		const int serverPort = 9999;
+		public int blockheight;
+		public Tuple<int, string> longest_peer;
+		public int serverPort = 9999;
 		Random rnd = new Random();
 
 		public Network()
@@ -60,19 +62,39 @@ namespace Blockchain
 		{
 			timer.Stop();			
 			PeerDiscovery();
+			UpdateSelf();
 			TransferMerged();
 			MergePeers();
 			SortPeers();
 			CheckPeersOnline();
+			GetMaxBlockHeight();
 			AdjustTimer();
+			SavePeers();
 			timer.Start();
+		}
+
+		public void GetMaxBlockHeight()
+		{
+			//Returns the highest blockheight and ip address of node
+			int height = 0;
+			string ip = "";
+
+			foreach (Peer peer in peers.peers_list)
+			{
+				if (peer.blockheight > height)
+				{
+					height = peer.blockheight;
+					ip = peer.ip_address;
+				}
+			}
+			longest_peer = new Tuple<int, string>(height, ip);
 		}
 
 		private void TransferMerged()
 		{
 			merging_now = to_merge;
 			to_merge = new List<Peers>();
-	}
+		}
 
 		private void AdjustTimer()
 		{
@@ -129,21 +151,48 @@ namespace Blockchain
 			}			
 		}
 
+		public void UpdateSelf()
+		{
+			var dict = peers.peers_list.ToDictionary(p => p.ip_address);
+			dict[CurrentIPAddress()].last_seen = DateTime.UtcNow;
+			dict[CurrentIPAddress()].connected = true;
+			dict[CurrentIPAddress()].blockheight = blockheight;
+			peers.peers_list = dict.Values.ToList();
+		}
+
+		//public void MergePeers()
+		//{
+		//	foreach (Peers mn in merging_now)
+		//	{
+		//		var dict = peers.peers_list.ToDictionary(p => p.ip_address);
+		//		foreach (var new_peers in mn.peers_list)
+		//		{
+		//			// create peer if it doesn't exist, otherwise overwrite
+		//			dict[new_peers.ip_address] = new_peers;
+
+		//			// set default connected state to true
+		//			dict[new_peers.ip_address].connected = true;
+		//		}
+		//		peers.peers_list = dict.Values.ToList();
+		//	}
+		//}
 		public void MergePeers()
 		{
-			foreach(Peers mn in merging_now)
+			foreach (Peers mn in merging_now)
 			{
-				var dict = peers.peers_list.ToDictionary(p => p.ip_address);
-				foreach (var new_peers in mn.peers_list)
+				//MessageBox.Show("Old: " + Serialize.SerializePeers(mn));
+				var dict = mn.peers_list.ToDictionary(p => p.ip_address);
+				foreach (var old_peers in peers.peers_list)
 				{
 					// create peer if it doesn't exist, otherwise overwrite
-					dict[new_peers.ip_address] = new_peers;
+					dict[old_peers.ip_address] = old_peers;
 
 					// set default connected state to true
-					dict[new_peers.ip_address].connected = true;
+					dict[old_peers.ip_address].connected = true;
 				}
 				peers.peers_list = dict.Values.ToList();
-			}			
+				//MessageBox.Show("New: " + Serialize.SerializePeers(peers));
+			}
 		}
 
 		private void CheckPeersOnline()
@@ -158,18 +207,20 @@ namespace Blockchain
 					{
 						try
 						{
-							peer.conn = TCPConnection.GetConnection(connInfo,true);
+							peer.conn = TCPConnection.GetConnection(connInfo,true);							
 
 							if (peer.conn.ConnectionAlive(100))
 							{
 								//MessageBox.Show("Connection to " + peer.ip_address.ToString() + " is alive.");
+								//NetworkComms.SendObject("SendBlockHeight", peer.ip_address, serverPort, blockheight.ToString()+","+CurrentIPAddress());
 								peer.last_seen = DateTime.UtcNow;
 								peer.connected = true;
 							}
 						}
-						catch (Exception)
+						catch (Exception ex)
 						{
 							//MessageBox.Show("Connection to " + peer.ip_address.ToString() + " is dead.");
+							Console.WriteLine(ex);
 							peer.connected = false;
 						}
 					}
@@ -291,12 +342,45 @@ namespace Blockchain
 				MessageBox.Show("Transaction sent to " + count.ToString() + " peers.");
 			}					
 		}
+
+		public void SendBlock(string blk)
+		{
+			if (peers != null)
+			{
+				int count = 0;
+				foreach (Peer peer in peers.peers_list)
+				{
+					MessageBox.Show("Peer: " + peer.ip_address + "\nConnected: " + peer.connected.ToString());
+					// Don't send to yourself
+					if (peer.ip_address != CurrentIPAddress())
+					{
+						// Only send to connected peers
+						if (peer.connected)
+						{
+							try
+							{
+								// Try sending the block
+								NetworkComms.SendObject("SendBlock", peer.ip_address, serverPort, blk);
+								count++;
+							}
+							catch (Exception)
+							{
+								// If the transaction didn't go through, the peer is most likely offline
+								peer.connected = false;
+							}
+						}
+					}
+				}
+				MessageBox.Show("Block sent to " + count.ToString() + " peers.");
+			}
+			
+		}
 	}
 
 	public class Peers
 	{
 		[JsonIgnoreAttribute]
-		public string ip_address;
+		public string ip_address;		
 
 		public List<Peer> peers_list = new List<Peer>();
 	}
@@ -305,15 +389,13 @@ namespace Blockchain
 	{
 		public string ip_address;
 		public DateTime last_seen;
+		public int blockheight;
 
 		[JsonIgnoreAttribute]
 		public Connection conn;
 
 		[JsonIgnoreAttribute]
 		public bool connected;
-
-		[JsonIgnoreAttribute]
-		public int blockheight;
 
 		public Peer()
 		{

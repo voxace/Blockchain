@@ -34,11 +34,20 @@ namespace Blockchain
 			//Trigger the correct method when a certain packet type is received
 			NetworkComms.AppendGlobalIncomingPacketHandler<string>("SendTransaction", ReceiveTransaction);
 			NetworkComms.AppendGlobalIncomingPacketHandler<string>("SendBlock", ReceiveBlock);
+			NetworkComms.AppendGlobalIncomingPacketHandler<Tuple<string,int>>("RequestBlock", SendBlockAtHeight);
+			NetworkComms.AppendGlobalIncomingPacketHandler<Tuple<string, int>>("BlockFound", BlockFound);
 			NetworkComms.AppendGlobalIncomingPacketHandler<string>("PeerList", ReceivePeers);
 		
 			//Start listening for incoming connections
 			Connection.StartListening(ConnectionType.TCP, new System.Net.IPEndPoint(System.Net.IPAddress.Any, 9999));
 		}
+
+		private void BlockFound(PacketHeader packetHeader, Connection connection, Tuple<string, int> incomingObject)
+		{
+			
+		}
+
+		
 
 		private void ReceivePeers(PacketHeader packetHeader, Connection connection, string peer_list)
 		{
@@ -78,7 +87,11 @@ namespace Blockchain
 					
 					chain.Add(b);
 					blockHeight++;
+					network.blockheight = blockHeight;
 				}
+
+				// Start timer to keep chain in sync
+
 				previousBlock = chain.ElementAt(blockHeight - 1);
 				currentBlock = new Block();
 				currentBlock.NewBlock(blockHeight, previousBlock.HashBlock());
@@ -189,9 +202,6 @@ namespace Blockchain
 			// Serialize transaction as JSON data first
 			string tx = Serialize.SerializeTransaction(transaction);
 
-			// Broadcast to network via UDP
-			//UDPConnection.SendObject("SendTransaction", tx, new IPEndPoint(IPAddress.Broadcast, 10000));
-
 			// Broadcast to network via TCP
 			network.SendTransaction(tx);
 
@@ -199,16 +209,28 @@ namespace Blockchain
 			MessageBox.Show("Transaction Sent with TXID: \n\n" + transaction.txid);
 		}
 
-		public void SendBlock(Block block)
+		private void SendBlockAtHeight(PacketHeader packetHeader, Connection connection, Tuple<string,int> blockRequest)
+		{
+			// Serialize transaction as JSON data first
+			string blk = Serialize.SerializeBlock(chain.ElementAt(blockRequest.Item2));
+
+			// Broadcast to network via TCP
+			NetworkComms.SendObject("SendBlock", blockRequest.Item1, network.serverPort, blk);
+
+			// Show confirmation
+			MessageBox.Show("Block content sent: \n\n" + blk);
+		}
+
+		private void SendBlock(Block block)
 		{
 			// Serialize transaction as JSON data first
 			string blk = Serialize.SerializeBlock(block);
 
-			// Broadcast to network via UDP
-			//UDPConnection.SendObject("SendBlock", blk, new IPEndPoint(IPAddress.Broadcast, 10000));
+			// Send Block
+			network.SendBlock(blk);
 
 			// Show confirmation
-			MessageBox.Show("Transaction Sent with TXID: \n\n" + block.HashBlock());
+			MessageBox.Show("Block content sent: \n\n" + blk);
 		}
 
 		// Receive from network - add transaction to currentBlock
@@ -230,13 +252,42 @@ namespace Blockchain
 			}
 		}
 
-		private void ReceiveBlock(PacketHeader packetHeader, Connection connection, string incomingObject)
+		private void ReceiveBlock(PacketHeader packetHeader, Connection connection, string blk)
 		{
 			// Deserialize JSON data that is received
-			Block block = Serialize.DeserializeBlock(incomingObject);
+			Block block = Serialize.DeserializeBlock(blk);
 
 			// Testing
 			MessageBox.Show("Block Received with Hash: \n\n" + block.HashBlock());
+
+			// TODO: If it is the same height, disregard.
+			if (block.getIndex() == blockHeight - 1)
+			{
+				//MessageBox.Show("Block received has same height as current block, disregarding...");
+			}
+			else if(block.getIndex() > blockHeight)
+			{
+				MessageBox.Show("Block received is more than one block ahead. Finish syncing blockchain...");
+				// Load method to sync missing blocks
+			}
+			else if(block.getIndex() == blockHeight)
+			{
+				if(block.previousHash == previousBlock.HashBlock())
+				{
+					Serialize.WriteBlock(block);
+					chain.Add(block);
+					blockHeight++;
+					network.blockheight = blockHeight;
+					previousBlock = chain.ElementAt(blockHeight - 1);
+					SendBlock(block);
+					currentBlock = new Block();
+					currentBlock.NewBlock(blockHeight, previousBlock.HashBlock());
+				}
+				else
+				{
+					MessageBox.Show("Hashes do not match, disregarding block...");
+				}				
+			}			
 		}
 		#endregion
 
@@ -335,7 +386,11 @@ namespace Blockchain
 				Serialize.WriteBlock(currentBlock);
 				chain.Add(currentBlock);
 				blockHeight++;
+				network.blockheight = blockHeight;
 				previousBlock = chain.ElementAt(blockHeight - 1);
+
+				// Broadcast Block
+				SendBlock(currentBlock);
 
 				// Create new block
 				currentBlock = new Block();
