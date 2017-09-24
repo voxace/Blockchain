@@ -43,7 +43,6 @@ namespace Blockchain
 		private void ReceivePeers(PacketHeader packetHeader, Connection connection, string peer_list)
 		{
 			Peers new_peers = Serialize.DeserializePeers(peer_list);
-			MessageBox.Show("Receiving peer list from: " + new_peers.ip_address + "\n\n" + peer_list);
 			network.NewPeers(new_peers);
 		}
 

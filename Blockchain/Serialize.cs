@@ -71,7 +71,7 @@ namespace Blockchain
 
 		public static void WritePeers(Peers peers)
 		{
-			MessageBox.Show("Saving: " + SerializePeers(peers));
+			//MessageBox.Show("Saving: " + SerializePeers(peers));
 			File.WriteAllText(System.IO.Directory.GetCurrentDirectory() + "\\peers.json", SerializePeers(peers));
 		}
 

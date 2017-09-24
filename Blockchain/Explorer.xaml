@@ -294,7 +294,7 @@
 
             <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0" HorizontalAlignment="Center">
                 <Label Content="Connected Peers: " Foreground="White" FontFamily="Century Gothic" />
-                <Label Content="0" x:Name="ConnectedPeersLabel" Foreground="White" FontFamily="Century Gothic" HorizontalAlignment="Right" HorizontalContentAlignment="Left"/>
+                <Label Content="" x:Name="ConnectedPeersLabel" Foreground="White" FontFamily="Century Gothic" HorizontalAlignment="Right" HorizontalContentAlignment="Left"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Grid.Column="2" VerticalAlignment="Center" Margin="0,0,6,0" HorizontalAlignment="Right">

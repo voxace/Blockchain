@@ -13,12 +13,18 @@ using NetworkCommsDotNet.Connections;
 using NetworkCommsDotNet.Connections.TCP;
 using NetworkCommsDotNet.Connections.UDP;
 
-namespace Blockchain{
+namespace Blockchain
+{
+	// TODO: Load Blockchain
+	// to load the blockchain we will need to verify the hash of the latest downloaded block
+	// then just download from there
+	// If no blocks have been downloaded, then download all from the longest chain
+	// if the hash doesn't match then also download all from the longest chain
 
-	// TODO: use a temporary peers list to add new connections
-	// Merge with the real list on a regular basis, prevent list from being modified during access
-	// Add remove duplicates method
-	// maybe check if exists before calling add method
+	// TODO: Get Unconfirmed transactions
+	// Request list of unconfirmed transactions in current block on load from random peer
+	// Send current block over via TCP to requesting address
+	// Set current_block to received block
 
 	public class Network
 	{
@@ -38,11 +44,6 @@ namespace Blockchain{
 			// Add self to peers list
 			AddSelf();
 
-			//MessageBox.Show(Serialize.SerializePeers(peers));
-
-			// Assign local IP address
-			//peers = new Peers {	ip_address = CurrentIPAddress()	};
-
 			// Trigger the correct method when a certain packet type is received
 			NetworkComms.AppendGlobalIncomingPacketHandler<string>("Announce", Announce);
 
@@ -57,12 +58,14 @@ namespace Blockchain{
 
 		private void Main(object sender, ElapsedEventArgs e)
 		{
-			CheckPeersOnline();
+			timer.Stop();			
 			PeerDiscovery();
 			TransferMerged();
 			MergePeers();
 			SortPeers();
+			CheckPeersOnline();
 			AdjustTimer();
+			timer.Start();
 		}
 
 		private void TransferMerged()
@@ -106,6 +109,8 @@ namespace Blockchain{
 				{
 					if (p.ip_address == CurrentIPAddress())
 					{
+						p.last_seen = DateTime.UtcNow;
+						p.connected = false;
 						found = true;
 					}
 				}
@@ -126,46 +131,18 @@ namespace Blockchain{
 
 		public void MergePeers()
 		{
-			if(peers != null)
+			foreach(Peers mn in merging_now)
 			{
-				try
+				var dict = peers.peers_list.ToDictionary(p => p.ip_address);
+				foreach (var new_peers in mn.peers_list)
 				{
-					// iterate through each of the new peer lists
-					foreach (Peers mn in merging_now)
-					{
-						foreach(Peer np in mn.peers_list)
-						{							
-							foreach (Peer p in peers.peers_list)
-							{
-								bool found = false;
-								// compare to what is in current list
-								if (p.ip_address == np.ip_address)
-								{
-									// flag the ip_address as duplicate
-									found = true;
+					// create peer if it doesn't exist, otherwise overwrite
+					dict[new_peers.ip_address] = new_peers;
 
-									MessageBox.Show("duplicate");
-
-									// Update last_seen datetime to latest value
-									if (DateTime.Compare(np.last_seen, p.last_seen) > 0)
-									{
-										p.last_seen = np.last_seen;
-									}
-								}
-								if (!found)
-								{
-									MessageBox.Show("new ip");
-									// add to the list if not found
-									peers.peers_list.Add(np);
-								}
-							}
-						}						
-					}
+					// set default connected state to true
+					dict[new_peers.ip_address].connected = true;
 				}
-				catch (Exception)
-				{
-					// Collection may have been modified
-				}
+				peers.peers_list = dict.Values.ToList();
 			}			
 		}
 
@@ -173,40 +150,34 @@ namespace Blockchain{
 		{
 			if (peers != null)
 			{
-				try
+				foreach (Peer peer in peers.peers_list)
 				{
-					foreach (Peer peer in peers.peers_list)
+					ConnectionInfo connInfo = new ConnectionInfo(peer.ip_address, serverPort);
+
+					if (peer.ip_address != CurrentIPAddress() && peer.ip_address != "127.0.0.1")
 					{
-						ConnectionInfo connInfo = new ConnectionInfo(peer.ip_address, serverPort);
-
-						if (peer.ip_address != CurrentIPAddress())
+						try
 						{
-							try
-							{
-								peer.conn = TCPConnection.GetConnection(connInfo);
+							peer.conn = TCPConnection.GetConnection(connInfo,true);
 
-								if (peer.conn.ConnectionAlive(100))
-								{
-									MessageBox.Show("Connection to " + peer.ip_address.ToString() + " is alive.");
-									peer.last_seen = DateTime.UtcNow;
-									peer.connected = true;
-								}
-								else
-								{
-									peer.connected = false;
-								}
-							}
-							catch (Exception)
+							if (peer.conn.ConnectionAlive(100))
 							{
-								// Error connecting
+								//MessageBox.Show("Connection to " + peer.ip_address.ToString() + " is alive.");
+								peer.last_seen = DateTime.UtcNow;
+								peer.connected = true;
 							}
-
+						}
+						catch (Exception)
+						{
+							//MessageBox.Show("Connection to " + peer.ip_address.ToString() + " is dead.");
+							peer.connected = false;
 						}
 					}
-				}
-				catch (Exception)
-				{
-					// Collection may have been modified
+					else
+					{
+						peer.connected = true;
+						peer.last_seen = DateTime.UtcNow;
+					}
 				}
 			}
 			connectedPeers = CountPeersOnline();
@@ -224,21 +195,19 @@ namespace Blockchain{
 			{
 				foreach (Peer peer in peers.peers_list)
 				{
-					if (peer.connected)
+					if (peer.connected && peer.ip_address != CurrentIPAddress())
 					{
 						count++;
 					}
 				}
 			}
-			return count - 1;
+			return count;
 		}
 
 		public void PeerDiscovery()
 		{
 			// Announces IP address over UDP, expect nodes to respond with list of peers
 			UDPConnection.SendObject("Announce", CurrentIPAddress(), new IPEndPoint(IPAddress.Broadcast, 10000));
-			//NetworkComms.SendObject("PeerList", "192.168.1.249", serverPort, Serialize.SerializePeers(peers));
-			// the more peers are connected, the less frequent the announces
 		}
 
 		private void Announce(PacketHeader packetHeader, Connection connection, string sender_ip)
@@ -246,7 +215,6 @@ namespace Blockchain{
 			// Check to make sure message has not come from this computer
 			if (sender_ip != CurrentIPAddress() && sender_ip != "127.0.0.1")
 			{
-				//MessageBox.Show("Sending message to: " + sender_ip);
 				// Sends TCP Packet containing list of peers in JSON format to IP address that announced itself
 				try
 				{
@@ -293,15 +261,34 @@ namespace Blockchain{
 
 		public void SendTransaction(string tx)
 		{
-			// Send transaction to 5 random peers
 			if(peers != null)
 			{
-				Peers random_peers = new Peers();
-				random_peers.peers_list = (List<Peer>)peers.peers_list.OrderBy(x => rnd.Next()).Take(5);
-				foreach (Peer peer in random_peers.peers_list)
+				int count = 0;				
+				foreach (Peer peer in peers.peers_list)
 				{
-					NetworkComms.SendObject("SendTransaction", peer.ip_address, serverPort, tx);
+					MessageBox.Show("Peer: " + peer.ip_address + "\nConnected: " + peer.connected.ToString());
+					// Don't send to yourself
+					if(peer.ip_address != CurrentIPAddress())
+					{
+						// Only send to connected peers
+						if(peer.connected)
+						{
+							try
+							{
+								// Try sending the transaction
+								NetworkComms.SendObject("SendTransaction", peer.ip_address, serverPort, tx);
+								count++;
+							}
+							catch (Exception)
+							{
+								// If the transaction didn't go through, the peer is most likely offline
+								peer.connected = false;
+							}
+							
+						}						
+					}					
 				}
+				MessageBox.Show("Transaction sent to " + count.ToString() + " peers.");
 			}					
 		}
 	}

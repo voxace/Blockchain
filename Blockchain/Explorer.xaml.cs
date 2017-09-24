@@ -44,7 +44,7 @@ namespace Blockchain
 				{
 					PreviousButton.IsEnabled = true;
 				}
-			}
+			}			
 
 			timer = new Timer(1000);
 			timer.Elapsed += new ElapsedEventHandler(Timer_Elapsed);
@@ -52,7 +52,7 @@ namespace Blockchain
 		}
 
 		private void Timer_Elapsed(object sender, ElapsedEventArgs e)
-		{
+		{			
 			blockTotal = node.blockHeight - 1;
 			if(blockIndex < blockTotal)
 			{
@@ -61,6 +61,10 @@ namespace Blockchain
 					NextButton.IsEnabled = true;
 				}));				
 			}
+			this.Dispatcher.Invoke(DispatcherPriority.Render, new Action(() =>
+			{
+				ConnectedPeersLabel.Content = node.network.connectedPeers.ToString();
+			}));
 		}
 
 		private void PreviousButton_Click(object sender, RoutedEventArgs e)
