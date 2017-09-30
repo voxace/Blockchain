@@ -7,14 +7,6 @@ namespace Blockchain
 {
 	class Keys
 	{
-
-		// Testing asymmetric signature verification
-		//string messageToSign = "Hello World!";
-		//string signedMessage = Keys.SignData(messageToSign, Ledger.steedy_private_key);
-		//MessageBox.Show(signedMessage);
-		//bool success = Keys.VerifyData(messageToSign, signedMessage, Ledger.steedy_pub_key);
-		//MessageBox.Show("Is this message sent by me? " + success);
-
 		public static Tuple<string, string> CreateKeyPair()
 		{
 			CspParameters cspParams = new CspParameters { ProviderType = 1 };

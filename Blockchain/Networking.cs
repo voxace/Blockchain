@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 using NetworkCommsDotNet;
 using System.Net;
@@ -15,12 +13,6 @@ using NetworkCommsDotNet.Connections.UDP;
 
 namespace Blockchain
 {
-	// TODO: Load Blockchain
-	// to load the blockchain we will need to verify the hash of the latest downloaded block
-	// then just download from there
-	// If no blocks have been downloaded, then download all from the longest chain
-	// if the hash doesn't match then also download all from the longest chain
-
 	// TODO: Get Unconfirmed transactions
 	// Request list of unconfirmed transactions in current block on load from random peer
 	// Send current block over via TCP to requesting address
@@ -34,7 +26,7 @@ namespace Blockchain
 		public int connectedPeers = 0;
 		static Timer timer;
 		public int blockheight;
-		public Tuple<int, string> longest_peer;
+        public Tuple<int, string> longestChain;
 		public int serverPort = 9999;
 		Random rnd = new Random();
 
@@ -46,8 +38,11 @@ namespace Blockchain
 			// Add self to peers list
 			AddSelf();
 
-			// Trigger the correct method when a certain packet type is received
-			NetworkComms.AppendGlobalIncomingPacketHandler<string>("Announce", Announce);
+            // Assume current node is longest chain for now
+            longestChain = new Tuple<int, string>(blockheight, CurrentIPAddress());
+
+            // Trigger the correct method when a certain packet type is received
+            NetworkComms.AppendGlobalIncomingPacketHandler<string>("Announce", Announce);
 
 			// Start listening for UDP packets
 			Connection.StartListening(ConnectionType.UDP, new IPEndPoint(IPAddress.Any, 10000));
@@ -87,7 +82,7 @@ namespace Blockchain
 					ip = peer.ip_address;
 				}
 			}
-			longest_peer = new Tuple<int, string>(height, ip);
+			longestChain = new Tuple<int, string>(height, ip);
 		}
 
 		private void TransferMerged()
@@ -159,23 +154,7 @@ namespace Blockchain
 			dict[CurrentIPAddress()].blockheight = blockheight;
 			peers.peers_list = dict.Values.ToList();
 		}
-
-		//public void MergePeers()
-		//{
-		//	foreach (Peers mn in merging_now)
-		//	{
-		//		var dict = peers.peers_list.ToDictionary(p => p.ip_address);
-		//		foreach (var new_peers in mn.peers_list)
-		//		{
-		//			// create peer if it doesn't exist, otherwise overwrite
-		//			dict[new_peers.ip_address] = new_peers;
-
-		//			// set default connected state to true
-		//			dict[new_peers.ip_address].connected = true;
-		//		}
-		//		peers.peers_list = dict.Values.ToList();
-		//	}
-		//}
+		
 		public void MergePeers()
 		{
 			foreach (Peers mn in merging_now)
@@ -211,15 +190,12 @@ namespace Blockchain
 
 							if (peer.conn.ConnectionAlive(100))
 							{
-								//MessageBox.Show("Connection to " + peer.ip_address.ToString() + " is alive.");
-								//NetworkComms.SendObject("SendBlockHeight", peer.ip_address, serverPort, blockheight.ToString()+","+CurrentIPAddress());
 								peer.last_seen = DateTime.UtcNow;
 								peer.connected = true;
 							}
 						}
 						catch (Exception ex)
 						{
-							//MessageBox.Show("Connection to " + peer.ip_address.ToString() + " is dead.");
 							Console.WriteLine(ex);
 							peer.connected = false;
 						}
@@ -310,7 +286,7 @@ namespace Blockchain
 			return string.Empty;
 		}
 
-		public void SendTransaction(string tx)
+		public void BroadcastTransaction(string tx)
 		{
 			if(peers != null)
 			{
@@ -343,7 +319,7 @@ namespace Blockchain
 			}					
 		}
 
-		public void SendBlock(string blk)
+		public void BroadcastBlock(string blk)
 		{
 			if (peers != null)
 			{
@@ -375,6 +351,33 @@ namespace Blockchain
 			}
 			
 		}
+
+        public bool RequestBlock(int height)
+        {
+            List<Peer> onlinePeers = new List<Peer>();
+            foreach (Peer peer in peers.peers_list)
+            {
+                if (peer.connected && peer.ip_address != CurrentIPAddress() && peer.blockheight > height)
+                {
+                    onlinePeers.Add(peer);
+                }
+            }
+            if(onlinePeers.Count > 0)
+            {
+                Random rnd = new Random();
+                Peer random_peer = onlinePeers.ElementAt(rnd.Next(onlinePeers.Count));
+
+                MessageBox.Show("Requesting Block from " + random_peer.ip_address);
+                NetworkComms.SendObject("SendBlock", random_peer.ip_address, serverPort, new Tuple<string, int>(CurrentIPAddress(), height));
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
 	}
 
 	public class Peers

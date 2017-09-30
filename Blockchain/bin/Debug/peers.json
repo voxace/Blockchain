@@ -1,14 +1,14 @@
 {
   "peers_list": [
     {
-      "ip_address": "192.168.1.232",
-      "last_seen": "2017-09-24T12:05:39.9706963Z",
-      "blockheight": 13
+      "ip_address": "192.168.1.249",
+      "last_seen": "2017-09-28T01:51:01.4220727Z",
+      "blockheight": 15
     },
     {
-      "ip_address": "192.168.1.249",
-      "last_seen": "2017-09-24T12:05:51.2258459Z",
-      "blockheight": 15
+      "ip_address": "192.168.1.232",
+      "last_seen": "2017-09-30T13:01:45.7901136Z",
+      "blockheight": 18
     }
   ]
 }

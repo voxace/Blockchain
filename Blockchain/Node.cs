@@ -8,8 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using System.Windows;
-using System.Net;
-using NetworkCommsDotNet.Connections.UDP;
+using System.Timers;
 
 namespace Blockchain
 {
@@ -25,29 +24,35 @@ namespace Blockchain
 		public List<Block> chain = new List<Block>();
 		public Network network = new Network();
 		public int blockHeight = 0;
+        public int networkBlockHeight = 0;
 		public Miner mw = new Miner();
 		public bool mining = false;
 		public string miner_id = "";
+        static Timer timer;
 
-		public Node()
+        public Node()
 		{
 			//Trigger the correct method when a certain packet type is received
 			NetworkComms.AppendGlobalIncomingPacketHandler<string>("SendTransaction", ReceiveTransaction);
 			NetworkComms.AppendGlobalIncomingPacketHandler<string>("SendBlock", ReceiveBlock);
 			NetworkComms.AppendGlobalIncomingPacketHandler<Tuple<string,int>>("RequestBlock", SendBlockAtHeight);
-			NetworkComms.AppendGlobalIncomingPacketHandler<Tuple<string, int>>("BlockFound", BlockFound);
 			NetworkComms.AppendGlobalIncomingPacketHandler<string>("PeerList", ReceivePeers);
 		
 			//Start listening for incoming connections
 			Connection.StartListening(ConnectionType.TCP, new System.Net.IPEndPoint(System.Net.IPAddress.Any, 9999));
-		}
 
-		private void BlockFound(PacketHeader packetHeader, Connection connection, Tuple<string, int> incomingObject)
-		{
-			
-		}
+            // Timer for syncing blockchain
+            timer = new Timer(1000);
+            timer.Elapsed += new ElapsedEventHandler(Sync);
+            timer.Enabled = false;
+        }
 
-		
+        private void Sync(object sender, ElapsedEventArgs e)
+        {
+            timer.Enabled = false;
+            SyncBlockchain();
+            timer.Enabled = true;
+        }
 
 		private void ReceivePeers(PacketHeader packetHeader, Connection connection, string peer_list)
 		{
@@ -90,11 +95,13 @@ namespace Blockchain
 					network.blockheight = blockHeight;
 				}
 
-				// Start timer to keep chain in sync
+                // Start timer to keep chain in sync
+                timer.Enabled = true;
 
-				previousBlock = chain.ElementAt(blockHeight - 1);
+                previousBlock = chain.ElementAt(blockHeight - 1);
 				currentBlock = new Block();
 				currentBlock.NewBlock(blockHeight, previousBlock.HashBlock());
+
 			});
 			return true;
 		}
@@ -203,7 +210,7 @@ namespace Blockchain
 			string tx = Serialize.SerializeTransaction(transaction);
 
 			// Broadcast to network via TCP
-			network.SendTransaction(tx);
+			network.BroadcastTransaction(tx);
 
 			// Show confirmation
 			MessageBox.Show("Transaction Sent with TXID: \n\n" + transaction.txid);
@@ -227,7 +234,7 @@ namespace Blockchain
 			string blk = Serialize.SerializeBlock(block);
 
 			// Send Block
-			network.SendBlock(blk);
+			network.BroadcastBlock(blk);
 
 			// Show confirmation
 			MessageBox.Show("Block content sent: \n\n" + blk);
@@ -269,6 +276,7 @@ namespace Blockchain
 			{
 				MessageBox.Show("Block received is more than one block ahead. Finish syncing blockchain...");
 				// Load method to sync missing blocks
+                // Request block from random peer
 			}
 			else if(block.getIndex() == blockHeight)
 			{
@@ -285,10 +293,27 @@ namespace Blockchain
 				}
 				else
 				{
+                    // Block not valid
 					MessageBox.Show("Hashes do not match, disregarding block...");
 				}				
 			}			
 		}
+
+        public void SyncBlockchain()
+        {            
+            for (int i = blockHeight; i < network.longestChain.Item1; i++)
+            {                
+                if(network.RequestBlock(i))
+                {
+                    MessageBox.Show("Syncing Blockchain... Block: " + i);
+                }
+                else
+                {
+                    MessageBox.Show("Syncing Blockchain Failed");
+                    break;
+                }
+            }
+        }
 		#endregion
 
 		/// <summary>
