@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using NetworkCommsDotNet.Connections;
 using NetworkCommsDotNet.Connections.TCP;
 using NetworkCommsDotNet.Connections.UDP;
+using System.Net.NetworkInformation;
 
 namespace Blockchain
 {
@@ -272,18 +273,45 @@ namespace Blockchain
 			
 		}
 
-		public string CurrentIPAddress()
+        public static string[] GetAllLocalIPv4(NetworkInterfaceType _type)
+        {
+            List<string> ipAddrList = new List<string>();
+            foreach (NetworkInterface item in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (item.NetworkInterfaceType == _type && item.OperationalStatus == OperationalStatus.Up)
+                {
+                    foreach (UnicastIPAddressInformation ip in item.GetIPProperties().UnicastAddresses)
+                    {
+                        if (ip.Address.AddressFamily == AddressFamily.InterNetwork)
+                        {
+                            ipAddrList.Add(ip.Address.ToString());
+                        }
+                    }
+                }
+            }
+            return ipAddrList.ToArray();
+        }
+
+        public string CurrentIPAddress()
 		{
-			var host = Dns.GetHostEntry(Dns.GetHostName());
-			foreach (var ip in host.AddressList)
-			{
-				if (ip.AddressFamily == AddressFamily.InterNetwork)
-				{
-					//MessageBox.Show(ip.ToString());
-					return ip.ToString();
-				}
-			}
-			return string.Empty;
+            try
+            {
+                var host = Dns.GetHostEntry(Dns.GetHostName());
+                foreach (var ip in host.AddressList)
+                {
+                    if (ip.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        //MessageBox.Show(ip.ToString());
+                        return ip.ToString();
+                    }
+                }
+                return string.Empty;
+            }
+            catch (Exception)
+            {                
+                return GetAllLocalIPv4(NetworkInterfaceType.Ethernet).FirstOrDefault();
+            }
+            
 		}
 
 		public void BroadcastTransaction(string tx)
