@@ -113,7 +113,7 @@ namespace Blockchain
 
 			// Attempts to add transaction to current block on node
 			Tuple<bool, string> result = node.AddTransaction(senderTextBox.Text, recipientTextBox.Text, double.Parse(amountTextBox.Text),signature);
-			MessageBox.Show(result.Item2);
+			//MessageBox.Show(result.Item2);
 
 			// Clears the input boxes
 			senderTextBox.Clear();

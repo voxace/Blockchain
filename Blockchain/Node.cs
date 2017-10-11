@@ -85,7 +85,7 @@ namespace Blockchain
 						// Check to see if blockchain was tampered with
 						if (b.previousHash != chain.ElementAt(blockHeight - 1).HashBlock())
 						{							
-							MessageBox.Show("Chain has been modified. Exiting...");
+							//MessageBox.Show("Chain has been modified. Exiting...");
 							//break;
 						}
 					}
@@ -213,7 +213,7 @@ namespace Blockchain
 			network.BroadcastTransaction(tx);
 
 			// Show confirmation
-			MessageBox.Show("Transaction Sent with TXID: \n\n" + transaction.txid);
+			//MessageBox.Show("Transaction Sent with TXID: \n\n" + transaction.txid);
 		}
 
 		private void SendBlockAtHeight(PacketHeader packetHeader, Connection connection, Tuple<string,int> blockRequest)
@@ -225,7 +225,7 @@ namespace Blockchain
 			NetworkComms.SendObject("SendBlock", blockRequest.Item1, network.serverPort, blk);
 
 			// Show confirmation
-			MessageBox.Show("Block content sent: \n\n" + blk);
+			//MessageBox.Show("Block content sent: \n\n" + blk);
 		}
 
 		private void SendBlock(Block block)
@@ -237,7 +237,7 @@ namespace Blockchain
 			network.BroadcastBlock(blk);
 
 			// Show confirmation
-			MessageBox.Show("Block content sent: \n\n" + blk);
+			//MessageBox.Show("Block content sent: \n\n" + blk);
 		}
 
 		// Receive from network - add transaction to currentBlock
@@ -247,7 +247,7 @@ namespace Blockchain
 			Transaction transaction = Serialize.DeserializeTransaction(incomingObject);
 
 			// Testing
-			MessageBox.Show("Transaction Received with TXID: \n\n" + transaction.txid);
+			//MessageBox.Show("Transaction Received with TXID: \n\n" + transaction.txid);
 
 			// Verify data signature and account balance
 			Tuple<bool, string> result = verifyTransaction(transaction);
@@ -274,7 +274,7 @@ namespace Blockchain
 			}
 			else if(block.getIndex() > blockHeight)
 			{
-				MessageBox.Show("Block received is more than one block ahead. Finish syncing blockchain...");
+				//MessageBox.Show("Block received is more than one block ahead. Finish syncing blockchain...");
 				// Load method to sync missing blocks
                 // Request block from random peer
 			}
@@ -294,7 +294,7 @@ namespace Blockchain
 				else
 				{
                     // Block not valid
-					MessageBox.Show("Hashes do not match, disregarding block...");
+					//MessageBox.Show("Hashes do not match, disregarding block...");
 				}				
 			}			
 		}
@@ -305,11 +305,11 @@ namespace Blockchain
             {                
                 if(network.RequestBlock(i))
                 {
-                    MessageBox.Show("Syncing Blockchain... Block: " + i);
+                    //MessageBox.Show("Syncing Blockchain... Block: " + i);
                 }
                 else
                 {
-                    MessageBox.Show("Syncing Blockchain Failed");
+                    //MessageBox.Show("Syncing Blockchain Failed");
                     break;
                 }
             }
