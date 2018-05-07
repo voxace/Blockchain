@@ -265,7 +265,7 @@ namespace Blockchain
 			Block block = Serialize.DeserializeBlock(blk);
 
 			// Testing
-			MessageBox.Show("Block Received with Hash: \n\n" + block.HashBlock());
+			//MessageBox.Show("Block Received with Hash: \n\n" + block.HashBlock());
 
 			// TODO: If it is the same height, disregard.
 			if (block.getIndex() == blockHeight - 1)
@@ -342,7 +342,7 @@ namespace Blockchain
 
 			await Task.Run(() =>
 			{
-				while (hashString.Substring(0, 5) != "00000")
+				while (hashString.Substring(0, 5) != "00")
 				{
 					if (mining == false)
 					{

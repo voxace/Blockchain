@@ -90,3 +90,29 @@ U:\Blockchain\Blockchain\obj\Debug\Blockchain.csproj.GenerateResource.Cache
 U:\Blockchain\Blockchain\obj\Debug\Blockchain.csproj.CoreCompileInputs.cache
 U:\Blockchain\Blockchain\obj\Debug\Blockchain.exe
 U:\Blockchain\Blockchain\obj\Debug\Blockchain.pdb
+D:\Google Drive\Computing\Blockchain\Blockchain\bin\Debug\Blockchain.exe.config
+D:\Google Drive\Computing\Blockchain\Blockchain\bin\Debug\Blockchain.exe
+D:\Google Drive\Computing\Blockchain\Blockchain\bin\Debug\Blockchain.pdb
+D:\Google Drive\Computing\Blockchain\Blockchain\bin\Debug\InTheHand.Net.Personal.dll
+D:\Google Drive\Computing\Blockchain\Blockchain\bin\Debug\NetworkCommsDotNet.dll
+D:\Google Drive\Computing\Blockchain\Blockchain\bin\Debug\Newtonsoft.Json.dll
+D:\Google Drive\Computing\Blockchain\Blockchain\bin\Debug\QRCoder.dll
+D:\Google Drive\Computing\Blockchain\Blockchain\bin\Debug\UnityEngine.dll
+D:\Google Drive\Computing\Blockchain\Blockchain\bin\Debug\Newtonsoft.Json.xml
+D:\Google Drive\Computing\Blockchain\Blockchain\obj\Debug\Blockchain.csprojResolveAssemblyReference.cache
+D:\Google Drive\Computing\Blockchain\Blockchain\obj\Debug\Explorer.g.cs
+D:\Google Drive\Computing\Blockchain\Blockchain\obj\Debug\Miner.g.cs
+D:\Google Drive\Computing\Blockchain\Blockchain\obj\Debug\Wallet.g.cs
+D:\Google Drive\Computing\Blockchain\Blockchain\obj\Debug\App.g.cs
+D:\Google Drive\Computing\Blockchain\Blockchain\obj\Debug\Blockchain_MarkupCompile.cache
+D:\Google Drive\Computing\Blockchain\Blockchain\obj\Debug\Blockchain_MarkupCompile.lref
+D:\Google Drive\Computing\Blockchain\Blockchain\obj\Debug\App.baml
+D:\Google Drive\Computing\Blockchain\Blockchain\obj\Debug\Explorer.baml
+D:\Google Drive\Computing\Blockchain\Blockchain\obj\Debug\Miner.baml
+D:\Google Drive\Computing\Blockchain\Blockchain\obj\Debug\Wallet.baml
+D:\Google Drive\Computing\Blockchain\Blockchain\obj\Debug\Blockchain.g.resources
+D:\Google Drive\Computing\Blockchain\Blockchain\obj\Debug\Blockchain.Properties.Resources.resources
+D:\Google Drive\Computing\Blockchain\Blockchain\obj\Debug\Blockchain.csproj.GenerateResource.Cache
+D:\Google Drive\Computing\Blockchain\Blockchain\obj\Debug\Blockchain.csproj.CoreCompileInputs.cache
+D:\Google Drive\Computing\Blockchain\Blockchain\obj\Debug\Blockchain.exe
+D:\Google Drive\Computing\Blockchain\Blockchain\obj\Debug\Blockchain.pdb

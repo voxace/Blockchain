@@ -1,0 +1,15 @@
+{
+  "previousHash": "c5df56650aa14239083e6eca53dfec62b4c5fe514a6c899711c3fff596ebd5fc",
+  "index": 30,
+  "timestamp": "2017-10-18T03:40:33.9510648Z",
+  "data": {
+    "transactions": [
+      {
+        "sender": "miningReward",
+        "recipient": "BgIAAACkAABSU0ExAAQAAAEAAQA/KlTgRpoq4gx6RQFiPz+1FAEq5VOUZrfOWJ593nwm7gjsV6x+uxEJRScSLOmBda2PEmVTlFim2Y/Aund29KDXryz16sl6719hR3qZVUkEohAbvPayDJ7r70EAM+oGAU8KiPnyoQqF6bLexEE9yXtA39q94KTPMC4wT7jIhi1E9Q==",
+        "amount": 1.0,
+        "txid": "3e4abf350fa87e8774be8b92cd2eeed3bb68dfec5fb7e317fafb5f5cf3edea85"
+      }
+    ]
+  }
+}
